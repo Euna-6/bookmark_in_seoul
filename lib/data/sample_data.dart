@@ -1,0 +1,116 @@
+import '../model/menu.dart';
+import '../model/restaurant.dart';
+
+List<Restaurant> sampleData = [
+  Restaurant(
+    restaurantName: "문뜩",
+    district: "영등포구",
+    imgUrl: null,
+    cntStar: 12385,
+    cntHeart: 9098,
+    cntCheck: 3405,
+    cntX: 20,
+    isBookmarked: true,
+    bookmark: 2,
+      myMemo: "이거이렇게 하면 되는건가용? 밑에는 디폴트로 아무것도 안넣어야겠땅. 근데 막 엄청 길면 어떡해 리뷰가? 나 얼마나 글자수를 정해야 될지 모르겠는디요",
+    menuList: [
+      Menu(name:"맛있는뇨끼엄청맛있는감자뇨끼", price:21000,),
+      Menu(name:"로제파스타 크림파스타는 없네 아쉽당", price:18000,),
+      Menu(name:"파스타가 있으면 리조또도 있어야지", price:18000,),
+      Menu(name:"개인적으로 제로는 좀", price:4000,),
+    ]
+  ),
+
+  Restaurant(
+    restaurantName: "문래옥상",
+    district: "영등포구",
+    cntStar: 19094,
+    cntHeart: 8832,
+    cntCheck: 20211,
+    cntX: 305,
+    isBookmarked: true,
+    bookmark: 3,
+  ),
+  Restaurant(
+    restaurantName: "스몰",
+    district: "영등포구",
+    cntStar: 36653,
+    cntHeart: 24116,
+    cntCheck: 57331,
+    cntX: 255,
+    isBookmarked: true,
+    bookmark: 2,
+    myMemo: "석준이가 좋아하는 해산물집ㅎㅎ"
+  ),
+  Restaurant(
+      restaurantName: "러스트 베이커리",
+      district: "영등포구",
+      cntStar: 100306,
+      cntHeart: 30951,
+      cntCheck: 62311,
+      cntX: 503,
+      isBookmarked: true,
+      bookmark: 1,
+      myMemo: "여기 앞에서 사진 찍는 사람 인스타에서 많이 봤음"
+  ),
+  Restaurant(
+    restaurantName: "역전할머니맥주 서울문래역점",
+    district: "영등포구",
+    cntStar: 1093,
+    cntHeart: 391,
+    cntCheck: 4505,
+    cntX: 406,
+    bookmark: 0,
+  ),
+  Restaurant(
+      restaurantName: "곱",
+      district: "영등포구",
+      cntStar: 28094,
+      cntHeart: 30092,
+      cntCheck: 69392,
+      cntX: 90,
+      isBookmarked: true,
+      bookmark: 2,
+  ),
+  Restaurant(
+      restaurantName: "띤띤",
+      district: "영등포구",
+      cntStar: 97942,
+      cntHeart: 69021,
+      cntCheck: 49061,
+      cntX: 190,
+      isBookmarked: true,
+      bookmark: 2,
+  ),
+  Restaurant(
+    restaurantName: "모에루",
+    district: "영등포구",
+    cntStar: 10385,
+    cntHeart: 3902,
+    cntCheck: 6094,
+    cntX: 92,
+    bookmark: 0,
+      menuList: [
+        Menu(name:"(누적10만그릇판매)모에루라면", price:9900,),
+        Menu(name:"(시그니처)매콤소보루라멘", price:9900,),
+        Menu(name:"경양식 왕돈까스", price:12000,),
+        Menu(name:"모에루 버터카레", price:8900,),
+        Menu(name:"리얼탄탄멘", price:10900,),
+        Menu(name:"치킨가라아게카레", price:12900,),
+        Menu(name:"규동", price:9900,),
+        Menu(name:"소보루동", price:8900,),
+        Menu(name:"야키교자", price:5000,),
+      ]
+  ),
+  Restaurant(
+      restaurantName: "한이식당",
+      district: "영등포구",
+      cntStar: 29201,
+      cntHeart: 19009,
+      cntCheck: 78905,
+      cntX: 188,
+      isBookmarked: true,
+      bookmark: 1,
+  ),
+
+];
