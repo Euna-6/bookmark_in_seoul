@@ -51,18 +51,22 @@ class MyBookmark extends StatelessWidget {
                                   BookmarkIcon(
                                     bookmark: 1,
                                     size: 45,
+                                    onTap: (){},
                                   ),
                                   BookmarkIcon(
                                     bookmark: 2,
                                     size: 45,
+                                    onTap: (){},
                                   ),
                                   BookmarkIcon(
                                     bookmark: 3,
                                     size: 45,
+                                    onTap: (){},
                                   ),
                                   BookmarkIcon(
                                     bookmark: 4,
                                     size: 45,
+                                    onTap: (){},
                                   ),
                                 ],
                               ),

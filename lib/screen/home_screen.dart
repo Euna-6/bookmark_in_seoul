@@ -4,14 +4,23 @@ import 'package:bookmark_in_seoul/component/restaurant_item.dart';
 import '../model/restaurant.dart';
 import '../data/sample_data.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   // 테스트를 위한 샘플 데이터
   final List<Restaurant> sampleRestaurant = sampleData;
+  // ListView 상태 관리 위한 변수. 선택된 것을 뜻함.
+  int? _itemIndex;
+  int? _iconType;
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -43,7 +52,21 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         final item = sampleRestaurant[index];
                         return RestaurantItem(
+                          index: index,
+                          iconType: (_itemIndex == index) ? _iconType : null,
                           restaurant: item,
+                          onTap: (iconType) {
+                            setState(() {
+                              // 선택된 아이콘 다시 누르면 선택 해제
+                              if (_itemIndex == index && _iconType == iconType) {
+                                _itemIndex = null;
+                                _iconType = null;
+                              } else {
+                                _itemIndex = index;
+                                _iconType = iconType;
+                              }
+                            });
+                          },
                         );
                       },
                     ),

@@ -31,7 +31,7 @@ class DetailRestaurant extends StatelessWidget {
                   ),
             ),
           ),
-          // 식당 이름, 북마크 갯수, 지도 UI
+          // 식당 이름, 북마크 아이콘, 북마크 갯수, 지도 UI
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -140,7 +140,7 @@ class cntBookmark extends StatelessWidget {
     switch(kindOfBookmark) {
       case 1 : return Row(
         children: [
-          BookmarkIcon(bookmark: 1),
+          BookmarkIcon(bookmark: 1, onTap: (){},),
           SizedBox(
             width: 54,
             child: Text(
@@ -151,7 +151,7 @@ class cntBookmark extends StatelessWidget {
       );
       case 2 : return Row(
         children: [
-          BookmarkIcon(bookmark: 2),
+          BookmarkIcon(bookmark: 2, onTap: (){},),
           SizedBox(
             width: 54,
             child: Text(
@@ -162,7 +162,7 @@ class cntBookmark extends StatelessWidget {
       );
       case 3 : return Row(
         children: [
-          BookmarkIcon(bookmark: 3),
+          BookmarkIcon(bookmark: 3, onTap: (){},),
           SizedBox(
             width: 54,
             child: Text(
@@ -173,7 +173,7 @@ class cntBookmark extends StatelessWidget {
       );
       case 4 : return Row(
         children: [
-          BookmarkIcon(bookmark: 4),
+          BookmarkIcon(bookmark: 4, onTap: (){},),
           SizedBox(
             width: 54,
             child: Text(

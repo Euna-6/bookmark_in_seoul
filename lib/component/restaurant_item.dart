@@ -5,128 +5,137 @@ import '../model/restaurant.dart';
 
 class RestaurantItem extends StatelessWidget {
   final Restaurant restaurant;
+  final int index;
+  final int? iconType;
+  final Function(int) onTap;
 
   const RestaurantItem({
     super.key,
     required this.restaurant,
+    required this.index,
+    required this.iconType,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>
-            DetailRestaurant(restaurant: restaurant),
-          )
+          MaterialPageRoute(
+            builder: (context) => DetailRestaurant(restaurant: restaurant),
+          ),
         );
       },
       child: Container(
         child: Padding(
-          padding: const EdgeInsets.only(left:16, top:16),
+          padding: const EdgeInsets.only(left: 16, top: 16),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 식당 사진
-                Container(
-                  color: Colors.blue,
-                  height: 85,
-                  width: 85,
-                ),
-                SizedBox(width: 13,),
+                Container(color: Colors.blue, height: 85, width: 85),
+                SizedBox(width: 13),
                 // 식당 정보
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(restaurant.restaurantName,
+                      // 식당 이름
+                      Text(
+                        restaurant.restaurantName,
                         style: TextStyle(
-                        fontSize: 23.5,
-                        fontWeight: FontWeight.w600,
+                          fontSize: 23.5,
+                          fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                       // 북마크 갯수 확인 UI
-                      cntBookmark(restaurant : restaurant),
+                      cntBookmark(
+                        restaurant: restaurant,
+                        iconType: iconType,
+                        onTap: onTap,
+                      ),
                     ],
                   ),
                 ),
-                // 우측 아이콘
-                /*
-                BookmarkIcon(
-                  bookmark: restaurant.bookmark,
-                  size: 48,
-                  isBookmarked: true,
-                ),
-                SizedBox(width:10),
-
-                 */
               ],
             ),
           ),
-        )
+        ),
       ),
     );
   }
 }
 
-// 식당의 북마크 갯수 정보 UI
+// 식당의 북마크 아이콘, 갯수 정보 UI
 class cntBookmark extends StatelessWidget {
   final Restaurant restaurant;
+  final int? iconType;
+  final Function(int) onTap;
 
   const cntBookmark({
     required this.restaurant,
-    super.key
+    super.key,
+    required this.iconType,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-        children: [
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    BookmarkIcon(bookmark: 1),
-                    SizedBox(width:2),
-                    SizedBox(
-                        width: 65,
-                        child: Text(restaurant.formatCntStar)
-                    ),
-                    BookmarkIcon(bookmark: 2),
-                    SizedBox(width:2),
-                    SizedBox(
-                        width: 65,
-                        child: Text(restaurant.formatCntHeart)
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    BookmarkIcon(bookmark: 3),
-                    SizedBox(width:2),
-                    SizedBox(
-                        width: 65,
-                        child: Text(restaurant.formatCntCheck)
-                    ),
-                    BookmarkIcon(bookmark: 4),
-                    SizedBox(width:2),
-                    SizedBox(
-                        width: 65,
-                        child: Text(restaurant.formatCntX)
-                    ),
-                  ],
-                ),
-              ],
-            ),
+      children: [
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  BookmarkIcon(
+                    bookmark: 1,
+                    isBookmarked: iconType == 1,
+                    onTap: () {
+                      onTap(1);
+                    },
+                  ),
+                  SizedBox(width: 2),
+                  SizedBox(width: 65, child: Text(restaurant.formatCntStar)),
+                  BookmarkIcon(bookmark: 2,
+                    isBookmarked: iconType == 2,
+                    onTap: () {
+                      onTap(2);
+                    },),
+                  SizedBox(width: 2),
+                  SizedBox(width: 65, child: Text(restaurant.formatCntHeart)),
+                ],
+              ),
+              Row(
+                children: [
+                  BookmarkIcon(
+                    bookmark: 3,
+                    isBookmarked: iconType == 3,
+                    onTap: () {
+                      onTap(3);
+                    },),
+                  SizedBox(width: 2),
+                  SizedBox(width: 65, child: Text(restaurant.formatCntCheck)),
+                  BookmarkIcon(
+                    bookmark: 4,
+                    isBookmarked: iconType == 4,
+                    onTap: () {
+                      onTap(4);
+                    },),
+                  SizedBox(width: 2),
+                  SizedBox(width: 65, child: Text(restaurant.formatCntX)),
+                ],
+              ),
+            ],
           ),
-        ]
+        ),
+      ],
     );
   }
 }
-

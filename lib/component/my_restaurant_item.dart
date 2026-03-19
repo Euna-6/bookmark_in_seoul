@@ -55,7 +55,7 @@ class MyRestaurantItem extends StatelessWidget {
                             BookmarkIcon(
                               bookmark: restaurant.bookmark,
                               size: 21,
-                              isBookmarked: restaurant.isBookmarked,
+                              onTap: (){},
                             ),
                           ],
                         ),
