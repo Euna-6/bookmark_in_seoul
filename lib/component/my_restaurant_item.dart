@@ -4,12 +4,13 @@ import '../model/restaurant.dart';
 import '../screen/detail_restaurant.dart';
 
 class MyRestaurantItem extends StatelessWidget {
-
   final Restaurant restaurant;
+  final VoidCallback onTap;
 
   const MyRestaurantItem({
     super.key,
-    required this.restaurant
+    required this.restaurant,
+    required this.onTap
   });
 
   @override
@@ -59,7 +60,7 @@ class MyRestaurantItem extends StatelessWidget {
                               bookmark: restaurant.bookmark,
                               isBookmarked: restaurant.isBookmarked,
                               size: 21,
-                              onTap: (){},
+                              onTap: onTap,
                             ),
                           ],
                         ),

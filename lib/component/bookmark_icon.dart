@@ -23,7 +23,7 @@ class BookmarkIcon extends StatelessWidget {
         case 2 : return isBookmarked? Icons.favorite : Icons.favorite_border;
         case 3 : return Icons.check_circle_outline;
         case 4 : return Icons.thumb_down_off_alt_outlined;
-        default : return Icons.error_outline;
+        default : return Icons.bookmark_border;
       }
     }
 
