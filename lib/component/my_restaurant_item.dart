@@ -45,15 +45,19 @@ class MyRestaurantItem extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(restaurant.restaurantName,
-                              style: TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.w600,
+                            Expanded(
+                              child: Text(restaurant.restaurantName,
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),// 내가 설정한 북마크
                             BookmarkIcon(
                               bookmark: restaurant.bookmark,
+                              isBookmarked: restaurant.isBookmarked,
                               size: 21,
                               onTap: (){},
                             ),
