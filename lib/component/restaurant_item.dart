@@ -52,6 +52,7 @@ class RestaurantItem extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                       // 북마크 갯수 확인 UI
                       cntBookmark(
@@ -96,7 +97,7 @@ class cntBookmark extends StatelessWidget {
                 children: [
                   BookmarkIcon(
                     bookmark: 1,
-                    isBookmarked: iconType == 1,
+                    isBookmarked: restaurant.bookmark == 1,
                     onTap: () {
                       onTap(1);
                     },
@@ -104,7 +105,7 @@ class cntBookmark extends StatelessWidget {
                   SizedBox(width: 2),
                   SizedBox(width: 65, child: Text(restaurant.formatCntStar)),
                   BookmarkIcon(bookmark: 2,
-                    isBookmarked: iconType == 2,
+                    isBookmarked: restaurant.bookmark == 2,
                     onTap: () {
                       onTap(2);
                     },),
@@ -116,7 +117,7 @@ class cntBookmark extends StatelessWidget {
                 children: [
                   BookmarkIcon(
                     bookmark: 3,
-                    isBookmarked: iconType == 3,
+                    isBookmarked: restaurant.bookmark == 3,
                     onTap: () {
                       onTap(3);
                     },),
@@ -124,7 +125,7 @@ class cntBookmark extends StatelessWidget {
                   SizedBox(width: 65, child: Text(restaurant.formatCntCheck)),
                   BookmarkIcon(
                     bookmark: 4,
-                    isBookmarked: iconType == 4,
+                    isBookmarked: restaurant.bookmark == 4,
                     onTap: () {
                       onTap(4);
                     },),

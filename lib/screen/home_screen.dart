@@ -53,18 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         final item = sampleRestaurant[index];
                         return RestaurantItem(
                           index: index,
-                          iconType: (_itemIndex == index) ? _iconType : null,
+                          iconType: (item.isBookmarked) ? _iconType : null,
                           restaurant: item,
                           onTap: (iconType) {
                             setState(() {
-                              // 선택된 아이콘 다시 누르면 선택 해제
-                              if (_itemIndex == index && _iconType == iconType) {
-                                _itemIndex = null;
-                                _iconType = null;
-                              } else {
-                                _itemIndex = index;
-                                _iconType = iconType;
-                              }
+                              item.updateBookmark(iconType);
                             });
                           },
                         );
