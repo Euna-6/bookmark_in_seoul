@@ -20,13 +20,14 @@ class RestaurantItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async{
+        await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailRestaurant(restaurant: restaurant),
+            builder: (context) => DetailRestaurant(restaurant: restaurant, ),
           ),
         );
+        onTap(-1);
       },
       child: Container(
         child: Padding(

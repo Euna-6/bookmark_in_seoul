@@ -57,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           restaurant: item,
                           onTap: (iconType) {
                             setState(() {
+                              if(iconType==-1){
+                                // DetailRestaurant에서 pop 했을때 build 다시 실행하기 위해
+                                return;
+                              }
                               item.updateBookmark(iconType);
                             });
                           },

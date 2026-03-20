@@ -3,11 +3,16 @@ import 'package:bookmark_in_seoul/component/menu_item.dart';
 import 'package:flutter/material.dart';
 import '../model/restaurant.dart';
 
-class DetailRestaurant extends StatelessWidget {
+class DetailRestaurant extends StatefulWidget {
   final Restaurant restaurant;
 
   const DetailRestaurant({super.key, required this.restaurant});
 
+  @override
+  State<DetailRestaurant> createState() => _DetailRestaurantState();
+}
+
+class _DetailRestaurantState extends State<DetailRestaurant> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,16 +24,17 @@ class DetailRestaurant extends StatelessWidget {
             expandedHeight: 210.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: restaurant.imgUrl != null
-                  ? Image.network(restaurant.imgUrl!, fit: BoxFit.cover)
-                  : Container( // 이미지가 없는 경우
+              background: widget.restaurant.imgUrl != null
+                  ? Image.network(widget.restaurant.imgUrl!, fit: BoxFit.cover)
+                  : Container(
+                      // 이미지가 없는 경우
                       color: const Color(0xFFCCCCCC),
                       child: const Icon(
-                          Icons.restaurant,
-                          size: 50,
-                          color: Colors.white
+                        Icons.restaurant,
+                        size: 50,
+                        color: Colors.white,
                       ),
-                  ),
+                    ),
             ),
           ),
           // 식당 이름, 북마크 아이콘, 북마크 갯수, 지도 UI
@@ -39,34 +45,63 @@ class DetailRestaurant extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    restaurant.restaurantName,
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    widget.restaurant.restaurantName,
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:20.0, right:20.0, top: 8, bottom:24,),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                      top: 8,
+                      bottom: 24,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        cntBookmark(kindOfBookmark: 1, restaurant: restaurant,),
-                        cntBookmark(kindOfBookmark: 2, restaurant: restaurant,),
-                        cntBookmark(kindOfBookmark: 3, restaurant: restaurant,),
-                        cntBookmark(kindOfBookmark: 4, restaurant: restaurant,),
+                        cntBookmark(
+                          bookmark: 1,
+                          restaurant: widget.restaurant,
+                          onTap: () {
+                            setState(() {
+                              widget.restaurant.updateBookmark(1);
+                            });
+                          },
+                        ),
+                        cntBookmark(
+                          bookmark: 2,
+                          restaurant: widget.restaurant,
+                          onTap: () {
+                            setState(() {
+                              widget.restaurant.updateBookmark(2);
+                            });
+                          },
+                        ),
+                        cntBookmark(
+                          bookmark: 3,
+                          restaurant: widget.restaurant,
+                          onTap: () {
+                            setState(() {
+                              widget.restaurant.updateBookmark(3);
+                            });
+                          },
+                        ),
+                        cntBookmark(
+                          bookmark: 4,
+                          restaurant: widget.restaurant,
+                          onTap: () {
+                            setState(() {
+                              widget.restaurant.updateBookmark(4);
+                            });
+                          },
+                        ),
                       ],
                     ),
                   ),
                   // 지도
-                  Container(
-                    height: 200,
-                    color: Colors.grey,
-                  ),
-                  const Divider(
-                    height: 50,
-                    thickness: 1,
-                    color: Colors.grey,
-                  ),
+                  Container(height: 200, color: Colors.grey),
+                  const Divider(height: 50, thickness: 1, color: Colors.grey),
                 ],
               ),
             ),
@@ -78,7 +113,8 @@ class DetailRestaurant extends StatelessWidget {
           Lazy Loading 학습을 위해 SliverList를 사용
           */
           // 메뉴 리스트가 없을 경우
-          if (restaurant.menuList == null || restaurant.menuList!.isEmpty)
+          if (widget.restaurant.menuList == null ||
+              widget.restaurant.menuList!.isEmpty)
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(40.0),
@@ -97,102 +133,97 @@ class DetailRestaurant extends StatelessWidget {
               ),
             )
           else
-          // 메뉴가 있을 때만 SliverList 보여주기
+            // 메뉴가 있을 때만 SliverList 보여주기
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                    (context, index) => MenuItem(menu: restaurant.menuList![index]),
-                childCount: restaurant.menuList!.length,
+                (context, index) =>
+                    MenuItem(menu: widget.restaurant.menuList![index]),
+                childCount: widget.restaurant.menuList!.length,
               ),
             ),
           // 마지막 아이템 하단에 여백
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 32),
-          )
+          const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
-      /*
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.pop(context);
-        },
-        backgroundColor: Colors.white,
-        child: const Icon(Icons.arrow_back),
-      ),
-
-       */
     );
   }
 }
 
 // 식당 북마크 갯수 UI 클래스
 class cntBookmark extends StatelessWidget {
-  final int kindOfBookmark;
+  final int bookmark;
   final Restaurant restaurant;
+  final VoidCallback onTap;
 
   const cntBookmark({
     super.key,
-    required this.kindOfBookmark,
+    required this.bookmark,
     required this.restaurant,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    switch(kindOfBookmark) {
-      case 1 : return Row(
-        children: [
-          BookmarkIcon(bookmark: 1, onTap: (){},),
-          SizedBox(
-            width: 54,
-            child: Text(
-              restaurant.formatCntStar
+    switch (bookmark) {
+      case 1:
+        return Row(
+          children: [
+            BookmarkIcon(
+              bookmark: 1,
+              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==1,
+              onTap: () {
+                onTap();
+              },
             ),
-          ),
-        ],
-      );
-      case 2 : return Row(
-        children: [
-          BookmarkIcon(bookmark: 2, onTap: (){},),
-          SizedBox(
-            width: 54,
-            child: Text(
-                restaurant.formatCntHeart
+            SizedBox(width: 54, child: Text(restaurant.formatCntStar)),
+          ],
+        );
+      case 2:
+        return Row(
+          children: [
+            BookmarkIcon(
+              bookmark: 2,
+              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==2,
+              onTap: () {
+                onTap();
+              },
             ),
-          ),
-        ],
-      );
-      case 3 : return Row(
-        children: [
-          BookmarkIcon(bookmark: 3, onTap: (){},),
-          SizedBox(
-            width: 54,
-            child: Text(
-                restaurant.formatCntCheck
+            SizedBox(width: 54, child: Text(restaurant.formatCntHeart)),
+          ],
+        );
+      case 3:
+        return Row(
+          children: [
+            BookmarkIcon(
+              bookmark: 3,
+              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==3,
+              onTap: () {
+                onTap();
+              },
             ),
-          ),
-        ],
-      );
-      case 4 : return Row(
-        children: [
-          BookmarkIcon(bookmark: 4, onTap: (){},),
-          SizedBox(
-            width: 54,
-            child: Text(
-                restaurant.formatCntX
+            SizedBox(width: 54, child: Text(restaurant.formatCntCheck)),
+          ],
+        );
+      case 4:
+        return Row(
+          children: [
+            BookmarkIcon(
+              bookmark: 4,
+              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==4,
+              onTap: () {
+                onTap();
+              },
             ),
-          ),
-        ],
-      );
-      default : return Row(
-        children: [
-          Icon(
-            Icons.error_outline,
-            color: Colors.grey,
-          ),
-          Text(
-              '?'
-          ),
-        ],
-      );
+            SizedBox(width: 54, child: Text(restaurant.formatCntX)),
+          ],
+        );
+      default:
+        return Row(
+          children: [
+            Icon(Icons.error_outline, color: Colors.grey),
+            Text('?'),
+          ],
+        );
     }
   }
 }
