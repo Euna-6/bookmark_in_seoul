@@ -14,13 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // 테스트를 위한 샘플 데이터
   final List<Restaurant> sampleRestaurant = sampleData;
-  // ListView 상태 관리 위한 변수. 선택된 것을 뜻함.
-  int? _itemIndex;
+  // ListView 상태 관리 위한 변수. 선택된 아이콘을 뜻함.
   int? _iconType;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -73,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           )),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             //MaterialPageRoute(builder: (context) => MyBookmark()),
             PageRouteBuilder(
@@ -93,6 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           );
+          setState(() {
+            // MyBookmark에서 pop 되었을때 build 재실행하여 UI 업데이트
+          });
           },
         backgroundColor: Colors.white,
         child: const Icon(Icons.bookmarks),
