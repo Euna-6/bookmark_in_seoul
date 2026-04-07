@@ -27,7 +27,7 @@ class RestaurantItem extends StatelessWidget {
             builder: (context) => DetailRestaurant(restaurant: restaurant, ),
           ),
         );
-        onTap(-1);
+        //onTap(-1);
       },
       child: Container(
         child: Padding(

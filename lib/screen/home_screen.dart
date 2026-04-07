@@ -1,24 +1,26 @@
+import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/screen/my_bookmark.dart';
 import 'package:flutter/material.dart';
 import 'package:bookmark_in_seoul/component/restaurant_item.dart';
 import '../model/restaurant.dart';
 import '../data/sample_data.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  // 테스트를 위한 샘플 데이터
-  final List<Restaurant> sampleRestaurant = sampleData;
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   // ListView 상태 관리 위한 변수. 선택된 아이콘을 뜻함.
   int? _iconType;
 
   @override
   Widget build(BuildContext context) {
+    final restaurantList = ref.watch(restaurantProvider);
+    final localRestaurants = restaurantList.where((res)=>res.district=="영등포구").toList();
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.green,
               ),
               SizedBox(height: 15),
-              // 지역별, 북마크별 정렬 설정
+              // 지역별, 북마크별 정렬 설정 박스 UI
               SizedBox(
                   height: 95,
                   child: _Filter()
@@ -46,22 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     color: const Color(0xFFEAEAEA),
                     child: ListView.builder(
-                      itemCount: sampleRestaurant.length,
+                      itemCount: localRestaurants.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final item = sampleRestaurant[index];
+                        final item = localRestaurants[index];
                         return RestaurantItem(
                           index: index,
                           iconType: (item.isBookmarked) ? _iconType : null,
                           restaurant: item,
-                          onTap: (iconType) {
-                            setState(() {
-                              if(iconType==-1){
-                                // DetailRestaurant에서 pop 했을때 build 다시 실행하기 위해
-                                return;
-                              }
-                              item.updateBookmark(iconType);
-                            });
-                          },
+                          onTap: (iconType) => {
+                            ref.read(restaurantProvider.notifier).toggleBookmark(item.id, iconType),
+                          }
+
                         );
                       },
                     ),

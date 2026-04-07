@@ -3,6 +3,7 @@ import '../model/restaurant.dart';
 
 List<Restaurant> sampleData = [
   Restaurant(
+    id: 1,
     restaurantName: "문뜩",
     district: "영등포구",
     imgUrl: null,
@@ -20,8 +21,8 @@ List<Restaurant> sampleData = [
       Menu(name:"개인적으로 제로는 좀", price:4000,),
     ]
   ),
-
   Restaurant(
+    id: 2,
     restaurantName: "문래옥상",
     district: "영등포구",
     cntStar: 19094,
@@ -32,6 +33,7 @@ List<Restaurant> sampleData = [
     bookmark: 3,
   ),
   Restaurant(
+      id: 3,
     restaurantName: "스몰",
     district: "영등포구",
     cntStar: 36653,
@@ -43,6 +45,7 @@ List<Restaurant> sampleData = [
     myMemo: "석준이가 좋아하는 해산물집ㅎㅎ"
   ),
   Restaurant(
+      id: 4,
       restaurantName: "러스트 베이커리",
       district: "영등포구",
       cntStar: 100306,
@@ -54,6 +57,7 @@ List<Restaurant> sampleData = [
       myMemo: "여기 앞에서 사진 찍는 사람 인스타에서 많이 봤음"
   ),
   Restaurant(
+    id: 5,
     restaurantName: "역전할머니맥주 서울문래역점",
     district: "영등포구",
     cntStar: 1093,
@@ -63,16 +67,18 @@ List<Restaurant> sampleData = [
     bookmark: 0,
   ),
   Restaurant(
-      restaurantName: "곱",
-      district: "영등포구",
-      cntStar: 28094,
-      cntHeart: 30092,
-      cntCheck: 69392,
-      cntX: 90,
-      isBookmarked: true,
-      bookmark: 2,
+    id: 6,
+    restaurantName: "곱",
+    district: "영등포구",
+    cntStar: 28094,
+    cntHeart: 30092,
+    cntCheck: 69392,
+    cntX: 90,
+    isBookmarked: true,
+    bookmark: 2,
   ),
   Restaurant(
+    id: 7,
       restaurantName: "띤띤",
       district: "영등포구",
       cntStar: 97942,
@@ -83,6 +89,7 @@ List<Restaurant> sampleData = [
       bookmark: 2,
   ),
   Restaurant(
+      id: 8,
     restaurantName: "모에루",
     district: "영등포구",
     cntStar: 10385,
@@ -103,6 +110,7 @@ List<Restaurant> sampleData = [
       ]
   ),
   Restaurant(
+    id: 9,
       restaurantName: "한이식당",
       district: "영등포구",
       cntStar: 29201,
@@ -112,5 +120,15 @@ List<Restaurant> sampleData = [
       isBookmarked: true,
       bookmark: 1,
   ),
-
+  Restaurant(
+    id: 10,
+    restaurantName: "미노리스시",
+    district: "금천구",
+    cntStar: 8375,
+    cntHeart: 13210,
+    cntCheck: 8421,
+    cntX: 301,
+    isBookmarked: true,
+    bookmark: 2,
+  ),
 ];

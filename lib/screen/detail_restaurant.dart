@@ -1,20 +1,25 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
 import 'package:bookmark_in_seoul/component/menu_item.dart';
+import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
 import '../model/restaurant.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DetailRestaurant extends StatefulWidget {
+class DetailRestaurant extends ConsumerStatefulWidget {
   final Restaurant restaurant;
 
   const DetailRestaurant({super.key, required this.restaurant});
 
   @override
-  State<DetailRestaurant> createState() => _DetailRestaurantState();
+  ConsumerState<DetailRestaurant> createState() => _DetailRestaurantState();
 }
 
-class _DetailRestaurantState extends State<DetailRestaurant> {
+class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
   @override
   Widget build(BuildContext context) {
+    // 현재 보고 있는 식당에 해당하는 id를 찾아서 저장.
+    final restaurant = ref.watch(restaurantProvider).firstWhere((e)=>e.id == widget.restaurant.id);
+
     return Scaffold(
       // 아래로 스크롤 시에 상단 이미지를 사라지게 하기 위한 스크롤뷰
       body: CustomScrollView(
@@ -62,38 +67,42 @@ class _DetailRestaurantState extends State<DetailRestaurant> {
                       children: [
                         cntBookmark(
                           bookmark: 1,
-                          restaurant: widget.restaurant,
+                          restaurant: restaurant,
                           onTap: () {
-                            setState(() {
-                              widget.restaurant.updateBookmark(1);
-                            });
+                            ref.read(restaurantProvider.notifier).toggleBookmark(
+                              restaurant.id,
+                              1,
+                            );
                           },
                         ),
                         cntBookmark(
                           bookmark: 2,
-                          restaurant: widget.restaurant,
+                          restaurant: restaurant,
                           onTap: () {
-                            setState(() {
-                              widget.restaurant.updateBookmark(2);
-                            });
+                            ref.read(restaurantProvider.notifier).toggleBookmark(
+                              restaurant.id,
+                              2,
+                            );
                           },
                         ),
                         cntBookmark(
                           bookmark: 3,
-                          restaurant: widget.restaurant,
+                          restaurant: restaurant,
                           onTap: () {
-                            setState(() {
-                              widget.restaurant.updateBookmark(3);
-                            });
+                            ref.read(restaurantProvider.notifier).toggleBookmark(
+                              restaurant.id,
+                              3,
+                            );
                           },
                         ),
                         cntBookmark(
                           bookmark: 4,
-                          restaurant: widget.restaurant,
+                          restaurant: restaurant,
                           onTap: () {
-                            setState(() {
-                              widget.restaurant.updateBookmark(4);
-                            });
+                            ref.read(restaurantProvider.notifier).toggleBookmark(
+                              restaurant.id,
+                              4,
+                            );
                           },
                         ),
                       ],
