@@ -2,8 +2,6 @@ import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/screen/my_bookmark.dart';
 import 'package:flutter/material.dart';
 import 'package:bookmark_in_seoul/component/restaurant_item.dart';
-import '../model/restaurant.dart';
-import '../data/sample_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {

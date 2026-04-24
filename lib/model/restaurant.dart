@@ -79,21 +79,6 @@ class Restaurant{
     );
   }
 
-  /*
-  // 북마크 설정 및 해제 함수
-  void updateBookmark(int type){
-    // 선택된 것을 누르면 해제 : 선택 안된것을 누르면 선택설정
-    if(isBookmarked && bookmark == type){
-      isBookmarked = false;
-      bookmark = 0;
-    } else {
-      isBookmarked = true;
-      bookmark = type;
-    }
-  }
-
-   */
-
   // 숫자가 1000이 넘을 경우 K를 붙여서 축소
   // 북마크별로 각자 getter 생성
   String get formatCntStar {

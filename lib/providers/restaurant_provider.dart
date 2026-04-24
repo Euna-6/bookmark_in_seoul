@@ -1,15 +1,24 @@
 import 'package:bookmark_in_seoul/data/sample_data.dart';
 import 'package:bookmark_in_seoul/model/restaurant.dart';
+import 'package:bookmark_in_seoul/repository/restaurant_repository.dart';
+import 'package:bookmark_in_seoul/repository/restaurant_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'filter_provider.dart';
+
+final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref){
+  return RestaurantRepositoryImpl();
+});
 
 // 북마크 설정, 해제 기능과 관련된 기능들 모음
 class RestaurantNofitier extends Notifier<List<Restaurant>> {
 
   @override
   List<Restaurant> build() {
+    // Repository를 가져와서 초기 데이터 설정
+    final repo = ref.read(restaurantRepositoryProvider);
+    return repo.fetchRestaurants();
+
     // 전체 데이터
-    return sampleData;
+    // return sampleData;
   }
 
   // 북마크 상태 반전 기능
@@ -28,14 +37,6 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
               isBookmarked: true,
               bookmark: iconType,
           )
-          /*
-          // 북마크 설정된 아이템을 다시 누르면 해제. 아니라면 선택한 카테고리로 설정
-          res.copyWith(
-            isBookmarked: res.bookmark == iconType ? false : true,
-            bookmark: res.bookmark == iconType ? 0 : iconType,
-          )
-
-           */
         else
           res,
     ];

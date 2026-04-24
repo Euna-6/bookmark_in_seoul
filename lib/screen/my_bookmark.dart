@@ -40,7 +40,6 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
         restaurant.id,
         restaurant.bookmark
       );
-      // ref.read(restaurantProvider.notifier).clearBookmark(restaurant.id);
     }
   }
 
