@@ -11,26 +11,28 @@ class Restaurant{
   // 식당 이미지
   final String? imgUrl;
   // 북마크 '별' 갯수
-  int cntStar;
+  final int cntStar;
   // 북마크 '하트' 갯수
-  int cntHeart;
+  final int cntHeart;
   // 북마크 '체크' 갯수
-  int cntCheck;
+  final int cntCheck;
   // 북마크 'X' 갯수
-  int cntX;
+  final int cntX;
   // 개인의 북마크 설정 유무 확인
-  bool isBookmarked;
+  final bool isBookmarked;
   // 본인이 설정한 북마크
   // 0 : non
   // 1 : star
   // 2 : heart
   // 3 : check
   // 4 : X
-  int bookmark;
+  final int bookmark;
   // 식당에 대한 개인 메모
-  String? myMemo;
+  final String? myMemo;
   // 메뉴 정보
   final List<Menu>? menuList;
+  // 마지막 수정일
+  final DateTime? updatedAt;
 
   // 생성자
   Restaurant({
@@ -46,6 +48,7 @@ class Restaurant{
     this.bookmark=0,
     this.myMemo,
     this.menuList,
+    this.updatedAt,
   });
 
   // 불변성 유지를 위해 객체 내부 멤버 값을 직접 변경시키지 않고 copyWith을 통해 새 객체가 생성되도록 함
@@ -62,6 +65,7 @@ class Restaurant{
     int? bookmark,
     String? myMemo,
     List<Menu>? menuList,
+    DateTime? updatedAt,
 }) {
     return Restaurant(
         id: id ?? this.id,
@@ -76,6 +80,45 @@ class Restaurant{
         bookmark: bookmark ?? this.bookmark,
         myMemo: myMemo ?? this.myMemo,
         menuList: menuList ?? this.menuList,
+        updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  // 로컬 DB (sqflite) 연동을 위한 객체->Map 변환 함수
+  Map<String, dynamic> toMap() {
+    return {
+      'id' : id,
+      'restaurantName' : restaurantName,
+      'district' : district,
+      'imgUrl' : imgUrl,
+      'cntStar' : cntStar,
+      'cntHeart' : cntHeart,
+      'cntCheck' : cntCheck,
+      'cntX' : cntX,
+      // sqflite는 boolean 저장이 안됨
+      'isBookmarked' : isBookmarked ? 1 : 0,
+      'bookmark' : bookmark,
+      'myMemo' : myMemo,
+      'updatedAt' : updatedAt?.toIso8601String(),
+    };
+  }
+
+  // 로컬 DB 연동을 위한 Map->객체 변환 함수
+  factory Restaurant.fromMap(Map<String, dynamic> map, List<Map<String, dynamic>> menus){
+    return Restaurant(
+      id: map['id'],
+      restaurantName: map['restaurantName'],
+      district: map['district'],
+      imgUrl: map['imgUrl'],
+      cntStar: map['cntStar'],
+      cntHeart: map['cntHeart'],
+      cntCheck: map['cntCheck'],
+      cntX: map['cntX'],
+      isBookmarked: map['isBookmarked'] == 1,
+      bookmark: map['bookmark'],
+      myMemo: map['myMemo'],
+      updatedAt: DateTime.parse(map['updatedAt']),
+      menuList: menus.map((m)=>Menu.fromMap(m)).toList(),
     );
   }
 
