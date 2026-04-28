@@ -63,6 +63,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ),
+              Container(
+                height: 16.0,
+              )
             ],
           )),
       floatingActionButton: FloatingActionButton(
