@@ -28,6 +28,7 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
   Future<void> _loadInitialData() async {
     final repo = ref.read(restaurantRepositoryProvider);
     state = await repo.fetchRestaurants();
+
   }
 
   // 북마크 상태 반전 기능
@@ -35,26 +36,6 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
     final repo = ref.read(restaurantRepositoryProvider);
 
     // 화면 업데이트
-    /*
-    state = [
-      for (final res in state)
-        if (res.id == id)
-          // 설정된 아이콘을 또 눌렀다면 해제
-          res.bookmark == iconType
-            ? res.copyWith(
-            isBookmarked: false,
-            bookmark: 0,
-            myMemo: " ",
-          )
-          : res.copyWith(
-              isBookmarked: true,
-              bookmark: iconType,
-              updatedAt: DateTime.now(),
-          )
-        else
-          res,
-    ];
-     */
     state = [
       for (final res in state)
         if (res.id==id) _handleToggle(res, iconType) else res,
@@ -63,6 +44,9 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
     // DB 업데이트
     final updatedRes = state.firstWhere((res)=> res.id==id);
     await repo.addRestaurant(updatedRes);
+
+    // TEST
+
   }
 
   // 북마크 상태 변경 관련 로직

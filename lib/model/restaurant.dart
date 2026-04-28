@@ -117,7 +117,9 @@ class Restaurant{
       isBookmarked: map['isBookmarked'] == 1,
       bookmark: map['bookmark'],
       myMemo: map['myMemo'],
-      updatedAt: DateTime.parse(map['updatedAt']),
+      updatedAt: map['updatedAt'] != null
+        ? DateTime.parse(map['updatedAt'])
+      : DateTime.now(),
       menuList: menus.map((m)=>Menu.fromMap(m)).toList(),
     );
   }

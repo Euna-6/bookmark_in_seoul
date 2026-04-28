@@ -1,3 +1,5 @@
+import 'package:bookmark_in_seoul/data/sample_data.dart';
+import 'package:bookmark_in_seoul/data/sample_menu.dart';
 import 'package:bookmark_in_seoul/model/restaurant.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -36,6 +38,7 @@ class DatabaseHelper {
 
   // 테이블 생성
   Future _createDB(Database db, int version) async {
+
     // 식당 정보 테이블
     await db.execute('''
       CREATE TABLE restaurants (
@@ -56,7 +59,7 @@ class DatabaseHelper {
 
     // 메뉴 정보 테이블
     await db.execute('''
-      CREATE TABLE menus (
+      CREATE TABLE menuList (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       restaurantID INTEGER,
       name  TEXT,
@@ -65,6 +68,14 @@ class DatabaseHelper {
       FOREIGN KEY (restaurantId) REFERENCES restaurants (id) ON DELETE CASCADE
       )
     ''');
+
+    // 샘플 데이터
+    for(var res in sampleData){
+      await db.insert('restaurants', res.toMap());
+    }
+    for(var menu in sampleMenu){
+      await db.insert('menuList', menu.toMap());
+    }
   }
 
   Future<void> insertRestaurant(Restaurant restaurant) async {
@@ -83,7 +94,7 @@ class DatabaseHelper {
       // 메뉴 정보 저장
       for (var menu in restaurant.menuList ?? []){
         await txn.insert(
-          'menus',
+          'menuList',
           menu.toMap(restaurant.id),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
@@ -103,7 +114,7 @@ class DatabaseHelper {
     for (var resMap in resMaps){
       // SQL injection 공격을 막기 위해 ? 사용.
       final List<Map<String, dynamic>> menuMaps = await db.query(
-        'menus',
+        'menuList',
         where : 'restaurantId = ?',
         whereArgs : [resMap['id']],
       );

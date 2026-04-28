@@ -36,7 +36,9 @@ final filteredRestaurantProvider = Provider<List<Restaurant>> ((ref) {
    // 북마크 전체 리스트
    final allBookmarked = ref.watch(restaurantProvider);
    // 북마크 설정된 리스트
-   final bookmarkedList = allBookmarked.where((item)=> item.isBookmarked).toList();
+   final bookmarkedList = allBookmarked.where((item)=> item.isBookmarked).toList()
+     ..sort((a,b) => (b.updatedAt ?? DateTime(0))
+         .compareTo(a.updatedAt ?? DateTime(0)));
 
    // 필터링 후에 아이템이 없으면 전체 리스트를 출력
    // 아이템이 있으면 필터링된 아이템 리스트를 출력

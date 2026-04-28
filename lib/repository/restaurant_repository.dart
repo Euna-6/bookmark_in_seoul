@@ -12,7 +12,6 @@ abstract class RestaurantRepository{
 
     final List<Map<String, dynamic>> resMaps = await db.query(
       'restaurants',
-      orderBy: 'updatedAt DESC'
     );
 
     return await _dbHelper.getAllRestaurants();

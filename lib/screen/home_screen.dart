@@ -13,7 +13,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   // ListView 상태 관리 위한 변수. 선택된 아이콘을 뜻함.
-  int? _iconType;
+  // int? _iconType;
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +45,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   child: Container(
                     color: const Color(0xFFEAEAEA),
-                    child: ListView.builder(
+                    child: localRestaurants.isEmpty
+                    ? Center(child: Text("등록된 식당이 없어요!"))
+                    : ListView.builder(
                       itemCount: localRestaurants.length,
                       itemBuilder: (BuildContext context, int index) {
                         final item = localRestaurants[index];
                         return RestaurantItem(
                           index: index,
-                          iconType: (item.isBookmarked) ? _iconType : null,
+                          iconType: (item.isBookmarked) ? item.bookmark : null,
                           restaurant: item,
-                          onTap: (iconType) => {
+                          onTap: (iconType) =>
                             ref.read(restaurantProvider.notifier).toggleBookmark(item.id, iconType),
-                          }
-
                         );
                       },
                     ),
