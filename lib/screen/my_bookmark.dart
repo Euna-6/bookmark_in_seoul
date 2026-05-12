@@ -1,4 +1,5 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
+import 'package:bookmark_in_seoul/component/delete_dialog.dart';
 import 'package:bookmark_in_seoul/providers/filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,35 +15,6 @@ class MyBookmark extends ConsumerStatefulWidget {
 }
 
 class _MyBookmarkState extends ConsumerState<MyBookmark> {
-
-  // 북마크 아이콘 선택 시에 '해제하시겠습니까' 팝업 띄우는 함수
-  Future<void> unbookmark(WidgetRef ref, BuildContext context, Restaurant restaurant) async {
-    bool? shouldRemove = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: Text("${restaurant.restaurantName}의 북마크를 해제하시겠습니까?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text("취소"),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("해제"),
-          ),
-        ],
-      ),
-    );
-
-    // 사용자가 '해제'를 눌렀을 경우 실행
-    if (shouldRemove == true) {
-      ref.read(restaurantProvider.notifier).toggleBookmark(
-        restaurant.id,
-        restaurant.bookmark
-      );
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +57,15 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                         return MyRestaurantItem(
                           restaurant: item,
                           onTap: () {
-                            unbookmark(ref, context, item);
+                            DeleteDialog.show(
+                              context: context,
+                              onConfirm: () {
+                                ref.read(restaurantProvider.notifier).toggleBookmark(
+                                    item.id,
+                                    item.bookmark
+                                );
+                              }
+                            );
                           },
                         );
                       },

@@ -1,4 +1,5 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
+import 'package:bookmark_in_seoul/component/delete_dialog.dart';
 import 'package:bookmark_in_seoul/component/menu_item.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +70,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 1,
                           restaurant: restaurant,
                           onTap: () {
-                            ref.read(restaurantProvider.notifier).toggleBookmark(
-                              restaurant.id,
-                              1,
+                            DeleteDialog.show(
+                                context: context,
+                                onConfirm: () {
+                                  ref.read(restaurantProvider.notifier).toggleBookmark(
+                                      restaurant.id,
+                                      1,
+                                  );
+                                }
                             );
                           },
                         ),
@@ -79,9 +85,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 2,
                           restaurant: restaurant,
                           onTap: () {
-                            ref.read(restaurantProvider.notifier).toggleBookmark(
-                              restaurant.id,
-                              2,
+                            DeleteDialog.show(
+                                context: context,
+                                onConfirm: () {
+                                  ref.read(restaurantProvider.notifier).toggleBookmark(
+                                    restaurant.id,
+                                    2,
+                                  );
+                                }
                             );
                           },
                         ),
@@ -89,9 +100,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 3,
                           restaurant: restaurant,
                           onTap: () {
-                            ref.read(restaurantProvider.notifier).toggleBookmark(
-                              restaurant.id,
-                              3,
+                            DeleteDialog.show(
+                                context: context,
+                                onConfirm: () {
+                                  ref.read(restaurantProvider.notifier).toggleBookmark(
+                                    restaurant.id,
+                                    3,
+                                  );
+                                }
                             );
                           },
                         ),
@@ -99,9 +115,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 4,
                           restaurant: restaurant,
                           onTap: () {
-                            ref.read(restaurantProvider.notifier).toggleBookmark(
-                              restaurant.id,
-                              4,
+                            DeleteDialog.show(
+                                context: context,
+                                onConfirm: () {
+                                  ref.read(restaurantProvider.notifier).toggleBookmark(
+                                    restaurant.id,
+                                    4,
+                                  );
+                                }
                             );
                           },
                         ),
