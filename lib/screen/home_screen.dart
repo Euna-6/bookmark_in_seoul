@@ -1,3 +1,4 @@
+import 'package:bookmark_in_seoul/component/filter_box.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/screen/my_bookmark.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // 지역별, 북마크별 정렬 설정 박스 UI
               SizedBox(
                   height: 95,
-                  child: _Filter()
+                  child: FilterBox()
               ),
               // 하단 식당 목록
               Expanded(

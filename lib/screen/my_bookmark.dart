@@ -1,5 +1,6 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
 import 'package:bookmark_in_seoul/component/delete_dialog.dart';
+import 'package:bookmark_in_seoul/component/filter_box.dart';
 import 'package:bookmark_in_seoul/providers/filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,12 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
             Container(height: 100, width: 100, color: Colors.green),
             SizedBox(height: 15),
             // 상단 북마크별 보기 설정
-            _FilterBookmark(
+            FilterBox(),
+            /*_FilterBookmark(
               onTap: (iconType) {
                 ref.read(filterProvider.notifier).toggle(iconType);
               },
-            ),
+            ),*/
             // 하단 식당 목록
             Container(
               child: filterList.isEmpty
