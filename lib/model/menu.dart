@@ -14,7 +14,7 @@ class Menu {
   });
 
   // 로컬 DB (sqflite) 연동을 위한 객체->Map 변환 함수
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(int restaurantId) {
     return {
       'id' : id,
       'restaurantId' : restaurantId,

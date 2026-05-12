@@ -39,7 +39,7 @@ class DatabaseHelper {
   // 테이블 생성
   Future _createDB(Database db, int version) async {
 
-    // 식당 정보 테이블
+    // 식당 정보 테이블 생성
     await db.execute('''
       CREATE TABLE restaurants (
         id INTEGER PRIMARY KEY,
@@ -57,7 +57,7 @@ class DatabaseHelper {
         )
     ''');
 
-    // 메뉴 정보 테이블
+    // 메뉴 정보 테이블 생성
     await db.execute('''
       CREATE TABLE menuList (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,12 +69,19 @@ class DatabaseHelper {
       )
     ''');
 
-    // 샘플 데이터
-    for(var res in sampleData){
-      await db.insert('restaurants', res.toMap());
-    }
-    for(var menu in sampleMenu){
-      await db.insert('menuList', menu.toMap());
+    // 데이터가 있는지 확인
+    final count = Sqflite.firstIntValue(await db.rawQuery(
+      'SELECT COUNT(*) FROM restaurants'
+    ));
+
+    // 데이터가 비어있을 때만 샘플 데이터 삽입
+    if (count == 0) {
+      for(var res in sampleData){
+        await db.insert('restaurants', res.toMap());
+      }
+      for(var menu in sampleMenu){
+        await db.insert('menuList', menu.toMap(menu.restaurantId!));
+      }
     }
   }
 
