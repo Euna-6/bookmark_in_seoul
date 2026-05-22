@@ -1,12 +1,11 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
-import 'package:bookmark_in_seoul/component/delete_dialog.dart';
+import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/filter_box.dart';
 import 'package:bookmark_in_seoul/providers/filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../component/my_restaurant_item.dart';
-import '../model/restaurant.dart';
 
 class MyBookmark extends ConsumerStatefulWidget {
   MyBookmark({super.key});
@@ -33,11 +32,6 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
             SizedBox(height: 15),
             // 상단 북마크별 보기 설정
             FilterBox(),
-            /*_FilterBookmark(
-              onTap: (iconType) {
-                ref.read(filterProvider.notifier).toggle(iconType);
-              },
-            ),*/
             // 하단 식당 목록
             Container(
               child: filterList.isEmpty
@@ -59,8 +53,10 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                         return MyRestaurantItem(
                           restaurant: item,
                           onTap: () {
-                            DeleteDialog.show(
+                            IsbookmarkDialog.show(
                               context: context,
+                              selectedIcon : item.bookmark,
+                              tappedIcon: item.bookmark,
                               onConfirm: () {
                                 ref.read(restaurantProvider.notifier).toggleBookmark(
                                     item.id,
@@ -88,87 +84,6 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
         },
         backgroundColor: Colors.white,
         child: const Icon(Icons.arrow_back),
-      ),
-    );
-  }
-}
-
-// 상단 북마크별 필터 UI
-class _FilterBookmark extends ConsumerWidget {
-  final Function(int) onTap;
-
-  const _FilterBookmark({
-    super.key,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final iconType = ref.watch(filterProvider);
-
-    return SizedBox(
-      height: 95,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(width: 16),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BookmarkIcon(
-                          bookmark: 1,
-                          size: 45,
-                          isBookmarked: iconType.contains(1),
-                          onTap: () {
-                            ref.read(filterProvider.notifier).toggle(1);
-                          },
-                        ),
-                        BookmarkIcon(
-                          bookmark: 2,
-                          size: 45,
-                          isBookmarked: iconType.contains(2),
-                          onTap: () {
-                            ref.read(filterProvider.notifier).toggle(2);
-                          },
-                        ),
-                        BookmarkIcon(
-                          bookmark: 3,
-                          size: 45,
-                          isBookmarked: iconType.contains(3),
-                          onTap: () {
-                            ref.read(filterProvider.notifier).toggle(3);
-                          },
-                        ),
-                        BookmarkIcon(
-                          bookmark: 4,
-                          size: 45,
-                          isBookmarked: iconType.contains(4),
-                          onTap: () {
-                            ref.read(filterProvider.notifier).toggle(4);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-        ],
       ),
     );
   }

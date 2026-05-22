@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:bookmark_in_seoul/component/restaurant_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../component/isbookmark_dialog.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
 
@@ -13,8 +15,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  // ListView 상태 관리 위한 변수. 선택된 아이콘을 뜻함.
-  // int? _iconType;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +56,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           index: index,
                           iconType: (item.isBookmarked) ? item.bookmark : null,
                           restaurant: item,
-                          onTap: (iconType) =>
+                          onTap: /*(iconType) =>
                             ref.read(restaurantProvider.notifier).toggleBookmark(item.id, iconType),
+                            */
+                              (iconType) {
+                            IsbookmarkDialog.show(
+                                context: context,
+                                selectedIcon : item.bookmark,
+                                tappedIcon: iconType,
+                                onConfirm: () {
+                                  print("$iconType 이랑 ${item.bookmark}");
+                                  ref.read(restaurantProvider.notifier).toggleBookmark(
+                                      item.id,
+                                      iconType
+                                  );
+                                }
+                            );
+                          }
                         );
                       },
                     ),
@@ -73,7 +88,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onPressed: () async {
           await Navigator.push(
             context,
-            //MaterialPageRoute(builder: (context) => MyBookmark()),
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => MyBookmark(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {

@@ -1,5 +1,5 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
-import 'package:bookmark_in_seoul/component/delete_dialog.dart';
+import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/menu_item.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +70,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 1,
                           restaurant: restaurant,
                           onTap: () {
-                            DeleteDialog.show(
+                            IsbookmarkDialog.show(
                                 context: context,
+                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
+                                tappedIcon: 1,
                                 onConfirm: () {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                       restaurant.id,
@@ -85,8 +87,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 2,
                           restaurant: restaurant,
                           onTap: () {
-                            DeleteDialog.show(
+                            IsbookmarkDialog.show(
                                 context: context,
+                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
+                                tappedIcon: 2,
                                 onConfirm: () {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                     restaurant.id,
@@ -100,8 +104,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 3,
                           restaurant: restaurant,
                           onTap: () {
-                            DeleteDialog.show(
+                            IsbookmarkDialog.show(
                                 context: context,
+                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
+                                tappedIcon: 3,
                                 onConfirm: () {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                     restaurant.id,
@@ -115,8 +121,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                           bookmark: 4,
                           restaurant: restaurant,
                           onTap: () {
-                            DeleteDialog.show(
+                            IsbookmarkDialog.show(
                                 context: context,
+                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
+                                tappedIcon: 4,
                                 onConfirm: () {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                     restaurant.id,
