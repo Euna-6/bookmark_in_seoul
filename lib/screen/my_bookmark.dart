@@ -1,7 +1,7 @@
-import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
 import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/filter_box.dart';
-import 'package:bookmark_in_seoul/providers/filter_provider.dart';
+import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
+import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +17,18 @@ class MyBookmark extends ConsumerStatefulWidget {
 class _MyBookmarkState extends ConsumerState<MyBookmark> {
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask((){
+      ref.read(districtFilterProvider.notifier).clear();
+      ref.read(bookmarkFilterProvider.notifier).clear();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // 필터링된 리스트를 실시간으로 가져온다
-    final filterList = ref.watch(filteredRestaurantProvider);
+    final filterList = ref.watch(filteredBookmarkProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -28,10 +37,17 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
           children: [
             // 최상단 로고 부분
             SizedBox(height: 15),
-            Container(height: 100, width: 100, color: Colors.green),
+            Image.asset(
+              'assets/icon/icon.png',
+              width: 100,
+              height: 100,
+            ),
             SizedBox(height: 15),
             // 상단 북마크별 보기 설정
-            FilterBox(),
+            SizedBox(
+                height: 95,
+                child: FilterBox()
+            ),
             // 하단 식당 목록
             Container(
               child: filterList.isEmpty
@@ -45,7 +61,7 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                     top: 16.0,
                   ),
                   child: Container(
-                    color: const Color(0xFFEAEAEA),
+                    color: const Color(0xFFFDEFD9),
                     child: ListView.builder(
                       itemCount: filterList.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -83,8 +99,13 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
           Navigator.pop(context);
         },
         backgroundColor: Colors.white,
-        child: const Icon(Icons.arrow_back),
+        child: const Icon(
+            Icons.arrow_back,
+            color: const Color(0xFFE57022)
+      ),
       ),
     );
   }
+
+
 }

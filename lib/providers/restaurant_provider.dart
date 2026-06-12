@@ -7,7 +7,7 @@ final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref){
   return RestaurantRepositoryImpl();
 });
 
-// 북마크 설정, 해제 기능과 관련된 기능들 모음
+// 북마크 설정, 해제와 관련된 기능들 모음
 class RestaurantNofitier extends Notifier<List<Restaurant>> {
 
   @override
@@ -16,13 +16,6 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
     // build 안에서는 await를 쓸 수 없기 때문
     _loadInitialData();
     return [];
-
-    // Repository를 가져와서 초기 데이터 설정
-    // final repo = ref.read(restaurantRepositoryProvider);
-    // return repo.fetchRestaurants();
-
-    // 전체 데이터
-    // return sampleData;
   }
 
   Future<void> _loadInitialData() async {

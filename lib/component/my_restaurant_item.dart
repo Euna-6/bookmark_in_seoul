@@ -33,7 +33,7 @@ class MyRestaurantItem extends StatelessWidget {
                 children: [
                   // 식당 사진
                   Container(
-                    color: Colors.blue,
+                    color: Color(0xFFE57022),
                     height: 85,
                     width: 85,
                   ),

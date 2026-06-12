@@ -37,7 +37,7 @@ class RestaurantItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 식당 사진
-                Container(color: Colors.blue, height: 85, width: 85),
+                Container(color: Color(0xFFE57022), height: 85, width: 85),
                 SizedBox(width: 13),
                 // 식당 정보
                 Expanded(
@@ -49,8 +49,8 @@ class RestaurantItem extends StatelessWidget {
                       Text(
                         restaurant.restaurantName,
                         style: TextStyle(
-                          fontSize: 23.5,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
                         ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -61,6 +61,7 @@ class RestaurantItem extends StatelessWidget {
                         iconType: iconType,
                         onTap: onTap,
                       ),
+                      SizedBox(height:2),
                     ],
                   ),
                 ),
