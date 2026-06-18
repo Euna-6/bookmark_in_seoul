@@ -23,6 +23,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     Future.microtask(() {
       ref.read(districtFilterProvider.notifier).state = '영등포구';
+      ref.read(bookmarkSortProvider.notifier).state = 2;
     });
   }
 

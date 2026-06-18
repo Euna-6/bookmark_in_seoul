@@ -114,58 +114,62 @@ Widget _filterButton({required String label, required bool isSelected}) {
 void _showDistrictBottomSheet(BuildContext context, WidgetRef ref) {
   showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
-        return Column(
-          children: [
-            // 상단 타이틀 + 초기화 버튼
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    '지역 선택',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      ref.read(districtFilterProvider.notifier).clear();
-                      Navigator.pop(context);
-                    },
-                    child: const Text('전지역 보기'),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1,),
-            // 지역 목록 리스트
-            Expanded(
-                child: ListView.builder(
-                  itemCount: districtNames.length,
-                  itemBuilder: (context, index) {
-                    final item = districtNames[index];
-                    final value = item['value'] as String;
-                    final label = item['label'] as String;
-                    final isSelected = ref.watch(districtFilterProvider)==value;
-
-                    return ListTile(
-                      title: Center(child: Text(
-                        label,
-                        style: TextStyle(
-                          color: isSelected ? Colors.blue : Colors.black,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        ),)),
-                      onTap: () {
-                        ref.read(districtFilterProvider.notifier).state = value;
+        return SizedBox(
+          height: 600,
+          child: Column(
+            children: [
+              // 상단 타이틀 + 초기화 버튼
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '지역 선택',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref.read(districtFilterProvider.notifier).clear();
                         Navigator.pop(context);
                       },
-                    );
-                  },
-            ))
-          ],
+                      child: const Text('전지역 보기'),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1,),
+              // 지역 목록 리스트
+              Expanded(
+                  child: ListView.builder(
+                    itemCount: districtNames.length,
+                    itemBuilder: (context, index) {
+                      final item = districtNames[index];
+                      final value = item['value'] as String;
+                      final label = item['label'] as String;
+                      final isSelected = ref.watch(districtFilterProvider)==value;
+
+                      return ListTile(
+                        title: Center(child: Text(
+                          label,
+                          style: TextStyle(
+                            color: isSelected ? Colors.blue : Colors.black,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),)),
+                        onTap: () {
+                          ref.read(districtFilterProvider.notifier).state = value;
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+              ))
+            ],
+          ),
         );
       },
   );
@@ -175,69 +179,70 @@ void _showDistrictBottomSheet(BuildContext context, WidgetRef ref) {
 void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref, FilterMode mode) {
   showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (context) {
-      return Column(
-        children: [
-          // 상단 타이틀 + 초기화 버튼
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '북마크 선택',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                TextButton(
-                  onPressed: () {
-                    if(mode == FilterMode.filter){
-                      ref.read(bookmarkFilterProvider.notifier).state = null;
-                    } else {
-                      ref.read(bookmarkSortProvider.notifier).state = null;
-                    }
-                    Navigator.pop(context);
-                  },
-                  child: const Text('초기화'),
-                ),
-              ],
+      return SizedBox(
+        height: 360,
+        child: Column(
+          children: [
+            // 상단 타이틀 + 초기화 버튼
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    '북마크 선택',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  if(mode==FilterMode.filter)
+                    TextButton(
+                      onPressed: () {
+                        ref.read(bookmarkFilterProvider.notifier).state = null;
+                        Navigator.pop(context);
+                      },
+                      child: const Text('초기화'),
+                    ),
+                ],
+              ),
             ),
-          ),
-          const Divider(height: 1),
-          // 북마크 목록 리스트
-          Expanded(
-            child: ListView.builder(
-              itemCount: bookmarkItems.length,
-              itemBuilder: (context, index) {
-                final item = bookmarkItems[index];
-                final value = item['value'] as int;
-                final label = item['label'] as String;
-                final isSelected = mode == FilterMode.filter
-                    ? ref.watch(bookmarkFilterProvider) == value
-                    : ref.watch(bookmarkSortProvider) == value;
+            const Divider(height: 1),
+            // 북마크 목록 리스트
+            Expanded(
+              child: ListView.builder(
+                itemCount: bookmarkItems.length,
+                itemBuilder: (context, index) {
+                  final item = bookmarkItems[index];
+                  final value = item['value'] as int;
+                  final label = item['label'] as String;
+                  final isSelected = mode == FilterMode.filter
+                      ? ref.watch(bookmarkFilterProvider) == value
+                      : ref.watch(bookmarkSortProvider) == value;
 
-                return ListTile(
-                  title: Center(child: Text(
-                    label,
-                    style: TextStyle(
-                      color: isSelected ? Colors.blue : Colors.black,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),)),
-                  onTap: () {
-                    if(mode == FilterMode.filter){
-                      ref.read(bookmarkFilterProvider.notifier).state = value;
-                    } else {
-                      ref.read(bookmarkSortProvider.notifier).state = value;
-                    }
-                    Navigator.pop(context);
-                  },
-                );
-              },
+                  return ListTile(
+                    title: Center(child: Text(
+                      label,
+                      style: TextStyle(
+                        color: isSelected ? Colors.blue : Colors.black,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      ),)),
+                    onTap: () {
+                      if(mode == FilterMode.filter){
+                        ref.read(bookmarkFilterProvider.notifier).state = value;
+                      } else {
+                        ref.read(bookmarkSortProvider.notifier).state = value;
+                      }
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     },
   );
