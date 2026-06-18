@@ -1,5 +1,6 @@
 import 'package:bookmark_in_seoul/component/filter_box.dart';
 import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
+import 'package:bookmark_in_seoul/providers/bookmark_sort_provider.dart';
 import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/screen/my_bookmark.dart';
@@ -27,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final restaurantList = ref.watch(filteredDistrictProvider);
+    final restaurantList = ref.watch(sortedBookmarkProvider);
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -44,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // 지역별, 북마크별 정렬 설정 박스 UI
               SizedBox(
                   height: 95,
-                  child: FilterBox()
+                  child: FilterBox(mode: FilterMode.sort)
               ),
               // 하단 식당 목록
               Expanded(
@@ -70,7 +71,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 selectedIcon : item.bookmark,
                                 tappedIcon: iconType,
                                 onConfirm: () {
-                                  print("$iconType 이랑 ${item.bookmark}");
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                       item.id,
                                       iconType

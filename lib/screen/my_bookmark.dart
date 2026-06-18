@@ -46,7 +46,7 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
             // 상단 북마크별 보기 설정
             SizedBox(
                 height: 95,
-                child: FilterBox()
+                child: FilterBox(mode: FilterMode.filter)
             ),
             // 하단 식당 목록
             Expanded(

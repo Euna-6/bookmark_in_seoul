@@ -1,4 +1,5 @@
 import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
+import 'package:bookmark_in_seoul/providers/bookmark_sort_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bookmark_in_seoul/data/district_data.dart';
@@ -12,11 +13,19 @@ const List<Map<String, dynamic>> bookmarkItems = [
   {'value': 4, 'label': '엑스X'},
 ];
 
+enum FilterMode {filter, sort}
+
 class FilterBox extends ConsumerWidget {
-  const FilterBox({super.key});
+  final FilterMode mode;
+  const FilterBox({super.key, required this.mode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final selectMode = mode == FilterMode.filter
+      ? ref.watch(bookmarkFilterProvider)
+        : ref.watch(bookmarkSortProvider);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
@@ -55,14 +64,14 @@ class FilterBox extends ConsumerWidget {
                   child: Column(
                     children: [
                       GestureDetector(
-                        onTap: () => _showBookmarkBottomSheet(context, ref),
+                        onTap: () => _showBookmarkBottomSheet(context, ref, mode),
                         child: _filterButton(
-                          label: ref.watch(bookmarkFilterProvider) != null
+                          label: selectMode != null
                               ? bookmarkItems.firstWhere(
-                                (item) => item['value'] == ref.watch(bookmarkFilterProvider),
+                                (item) => item['value'] == selectMode,
                           )['label'] as String
                               : '북마크',
-                          isSelected: ref.watch(bookmarkFilterProvider) != null,
+                          isSelected: selectMode != null,
                         ),
                       ),
                     ],
@@ -163,7 +172,7 @@ void _showDistrictBottomSheet(BuildContext context, WidgetRef ref) {
 }
 
 
-void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref) {
+void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref, FilterMode mode) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -184,7 +193,11 @@ void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref) {
                 ),
                 TextButton(
                   onPressed: () {
-                    ref.read(bookmarkFilterProvider.notifier).state = null;
+                    if(mode == FilterMode.filter){
+                      ref.read(bookmarkFilterProvider.notifier).state = null;
+                    } else {
+                      ref.read(bookmarkSortProvider.notifier).state = null;
+                    }
                     Navigator.pop(context);
                   },
                   child: const Text('초기화'),
@@ -201,7 +214,9 @@ void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref) {
                 final item = bookmarkItems[index];
                 final value = item['value'] as int;
                 final label = item['label'] as String;
-                final isSelected = ref.watch(bookmarkFilterProvider) == value;
+                final isSelected = mode == FilterMode.filter
+                    ? ref.watch(bookmarkFilterProvider) == value
+                    : ref.watch(bookmarkSortProvider) == value;
 
                 return ListTile(
                   title: Center(child: Text(
@@ -211,7 +226,11 @@ void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref) {
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                     ),)),
                   onTap: () {
-                    ref.read(bookmarkFilterProvider.notifier).state = value;
+                    if(mode == FilterMode.filter){
+                      ref.read(bookmarkFilterProvider.notifier).state = value;
+                    } else {
+                      ref.read(bookmarkSortProvider.notifier).state = value;
+                    }
                     Navigator.pop(context);
                   },
                 );
