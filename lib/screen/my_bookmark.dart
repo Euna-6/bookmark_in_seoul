@@ -49,45 +49,40 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                 child: FilterBox()
             ),
             // 하단 식당 목록
-            Container(
-              child: filterList.isEmpty
-                  ? Center(child: Text("리스트가 비었어요"))
-                  : Expanded(
-                // 리스트의 아이템이 1개라도 있을때
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                    top: 16.0,
-                  ),
-                  child: Container(
-                    color: const Color(0xFFFDEFD9),
-                    child: ListView.builder(
-                      itemCount: filterList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final item = filterList[index];
-                        return MyRestaurantItem(
-                          restaurant: item,
-                          onTap: () {
-                            IsbookmarkDialog.show(
-                              context: context,
-                              selectedIcon : item.bookmark,
-                              tappedIcon: item.bookmark,
-                              onConfirm: () {
-                                ref.read(restaurantProvider.notifier).toggleBookmark(
-                                    item.id,
-                                    item.bookmark
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0, right:16.0, top:16.0,
+                ),
+                child: Container(
+                  color: const Color(0xFFFDEFD9),
+                  child: filterList.isEmpty
+                      ? Center(child: Text("리스트가 비었어요"))
+                      : ListView.builder(
+                          itemCount: filterList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final item = filterList[index];
+                            return MyRestaurantItem(
+                              restaurant: item,
+                              onTap: () {
+                                IsbookmarkDialog.show(
+                                  context: context,
+                                  selectedIcon : item.bookmark,
+                                  tappedIcon: item.bookmark,
+                                  onConfirm: () {
+                                    ref.read(restaurantProvider.notifier).toggleBookmark(
+                                        item.id,
+                                        item.bookmark
+                                    );
+                                  }
                                 );
-                              }
+                              },
                             );
                           },
-                        );
-                      },
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
             Container(
               height: 16.0,
             )
