@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272944509545",
+    "project_id": "bookmark-7b8c2",
+    "storage_bucket": "bookmark-7b8c2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272944509545:android:30c1c525af5834c8caa8f8",
+        "android_client_info": {
+          "package_name": "com.example.bookmark_in_seoul"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ9L1fHt6aoEXKzjCbN2GaKeXxEfJjZ_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,7 +3,7 @@ import 'menu.dart';
 
 class Restaurant{
   // 식당 고유 아이디 (Primary Key)
-  final int id;
+  final String id;
   // 식당 이름
   final String restaurantName;
   // 식당 위치
@@ -53,7 +53,7 @@ class Restaurant{
 
   // 불변성 유지를 위해 객체 내부 멤버 값을 직접 변경시키지 않고 copyWith을 통해 새 객체가 생성되도록 함
   Restaurant copyWith({
-    int? id,
+    String? id,
     String? restaurantName,
     String? district,
     String? imgUrl,
@@ -84,10 +84,9 @@ class Restaurant{
     );
   }
 
-  // 로컬 DB (sqflite) 연동을 위한 객체->Map 변환 함수
+  // Firestore 연동을 위한 객체->Map 변환 함수
   Map<String, dynamic> toMap() {
     return {
-      'id' : id,
       'restaurantName' : restaurantName,
       'district' : district,
       'imgUrl' : imgUrl,
@@ -95,32 +94,31 @@ class Restaurant{
       'cntHeart' : cntHeart,
       'cntCheck' : cntCheck,
       'cntX' : cntX,
-      // sqflite는 boolean 저장이 안됨
-      'isBookmarked' : isBookmarked ? 1 : 0,
+      'isBookmarked' : isBookmarked,
       'bookmark' : bookmark,
       'myMemo' : myMemo,
       'updatedAt' : updatedAt?.toIso8601String(),
     };
   }
 
-  // 로컬 DB 연동을 위한 Map->객체 변환 함수
-  factory Restaurant.fromMap(Map<String, dynamic> map, List<Map<String, dynamic>> menus){
+  // Firestore 문서->객체 변환 함수
+  factory Restaurant.fromMap(Map<String, dynamic> map, List<Menu> menuList, {required String id}){
     return Restaurant(
-      id: map['id'],
+      id: id, //Firestore 문서 ID를 직접 받음
       restaurantName: map['restaurantName'],
       district: map['district'],
       imgUrl: map['imgUrl'],
-      cntStar: map['cntStar'],
-      cntHeart: map['cntHeart'],
-      cntCheck: map['cntCheck'],
-      cntX: map['cntX'],
-      isBookmarked: map['isBookmarked'] == 1,
-      bookmark: map['bookmark'],
-      myMemo: map['myMemo'],
+      cntStar: map['cntStar'] ?? 0,
+      cntHeart: map['cntHeart'] ?? 0,
+      cntCheck: map['cntCheck'] ?? 0,
+      cntX: map['cntX'] ?? 0,
+      isBookmarked: map['isBookmarked'] ?? false,
+      bookmark: map['bookmark'] ?? 0,
+      myMemo: map['myMemo'] ,
       updatedAt: map['updatedAt'] != null
         ? DateTime.parse(map['updatedAt'])
-      : DateTime.now(),
-      menuList: menus.map((m)=>Menu.fromMap(m)).toList(),
+      : null,
+      menuList: menuList,
     );
   }
 

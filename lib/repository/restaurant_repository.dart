@@ -1,27 +1,14 @@
-import '../database/database_helper.dart';
 import '../model/restaurant.dart';
 
 abstract class RestaurantRepository{
-  // 식당 리스트를 가져옴
-  // List<Restaurant> fetchRestaurants();
-
-  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
-
-  Future<List<Restaurant>> fetchRestaurants() async {
-    final db = await _dbHelper.database;
-
-    final List<Map<String, dynamic>> resMaps = await db.query(
-      'restaurants',
-    );
-
-    return await _dbHelper.getAllRestaurants();
-  }
-
-  Future<void> addRestaurant(Restaurant restaurant) async {
-    await _dbHelper.insertRestaurant(restaurant);
-  }
-
-  Future<void> removeRestaurant(int id) async {
-    await _dbHelper.deleteRestaurant(id);
-  }
+  Future<List<Restaurant>> fetchRestaurants();
+  Future<void> addRestaurant(Restaurant restaurant);
+  Future<void> removeRestaurant(String id);
 }
+
+/*
+restaurant_repository와 restaurant_repository_impl의 관계
+
+restaurant_repository : 식당 데이터를 가져오고, 저장하고, 삭제할 수 있는 규칙 (abstract)
+restaurant_repository_impl : 규칙의 실제 구현
+ */

@@ -33,8 +33,6 @@ final sortedBookmarkProvider = Provider<List<Restaurant>> ((ref) {
   final iconType = ref.watch(bookmarkSortProvider);  // 선택 북마크. 없으면 null
   final districtFilter = ref.watch(filteredDistrictProvider);  // 지역 필터링 결과 갖고옴
 
-  print(iconType);
-
   if (iconType == null){
     return districtFilter;
   }

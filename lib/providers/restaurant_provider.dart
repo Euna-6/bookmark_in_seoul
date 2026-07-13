@@ -25,7 +25,7 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
   }
 
   // 북마크 상태 반전 기능
-  Future<void> toggleBookmark(int id, int iconType) async {
+  Future<void> toggleBookmark(String id, int iconType) async {
     final repo = ref.read(restaurantRepositoryProvider);
 
     // 화면 업데이트
@@ -49,7 +49,7 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
       return _applyCountChange(res, iconType, -1).copyWith(
         isBookmarked : false,
         bookmark : 0,
-        myMemo: " ",
+        myMemo: null,
         updatedAt: DateTime.now(),
       );
     } else {
