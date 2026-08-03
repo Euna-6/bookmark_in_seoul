@@ -3,6 +3,7 @@ import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/menu_item.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:flutter/material.dart';
+import '../model/menu.dart';
 import '../model/restaurant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,24 @@ class DetailRestaurant extends ConsumerStatefulWidget {
 }
 
 class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
+  List<Menu> _menuList = [];  // 메뉴 상태 관리
+  bool _isMenuLoading = true; // 메뉴 로딩 상태
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _loadMenu());
+  }
+
+  Future<void> _loadMenu() async {
+    final repo = ref.read(restaurantRepositoryProvider);
+    final menus = await repo.fetchMenu(widget.restaurant.id);
+    setState(() {
+      _menuList = menus;
+      _isMenuLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // 현재 보고 있는 식당에 해당하는 id를 찾아서 저장.
@@ -150,9 +169,11 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
           해당 위젯엔 아이템이 적을 것으로 예상되지만
           Lazy Loading 학습을 위해 SliverList를 사용
           */
-          // 메뉴 리스트가 없을 경우
-          if (widget.restaurant.menuList == null ||
-              widget.restaurant.menuList!.isEmpty)
+          if (_isMenuLoading) // 메뉴 가져오는 중. 로딩 스피너 표시
+            SliverToBoxAdapter(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (_menuList.isEmpty) // 메뉴 없을때.
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(40.0),
@@ -175,8 +196,8 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) =>
-                    MenuItem(menu: widget.restaurant.menuList![index]),
-                childCount: widget.restaurant.menuList!.length,
+                    MenuItem(menu: _menuList[index]),
+                childCount: _menuList.length
               ),
             ),
           // 마지막 아이템 하단에 여백

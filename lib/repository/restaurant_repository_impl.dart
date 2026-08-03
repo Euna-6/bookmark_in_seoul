@@ -6,29 +6,28 @@ import '../model/restaurant.dart';
 class RestaurantRepositoryImpl implements RestaurantRepository {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+
+  // Firestore에서 전체 식당 데이터를 가져와 List<Restaurant>으로 반환
   @override
   Future<List<Restaurant>> fetchRestaurants() async {
     // restaurants 컬렉션 전체 가져오기
     final snapshot = await _db.collection('restaurants').get();
 
-    List<Restaurant> result = [];
+    return snapshot.docs.map((doc) =>
+        Restaurant.fromMap(doc.data(), [], id: doc.id)
+    ).toList();
+  }
 
-    for (var doc in snapshot.docs) {
-      // 각 식당의 menuList(서브컬렉션) 가졍괴
-      final menuSnapshot = await _db
-          .collection('restaurants')
-          .doc(doc.id)
-          .collection('menuList')
-          .get();
+  Future<List<Menu>> fetchMenu(String restaurantId) async {
+    final menuSnapshot = await _db
+        .collection('restaurants')
+        .doc(restaurantId)
+        .collection('menuList')
+        .get();
 
-      final menuList = menuSnapshot.docs
-          .map((m) => Menu.fromMap(m.data(), id: m.id))
-          .toList();
-
-      result.add(Restaurant.fromMap(doc.data(), menuList, id: doc.id));
-    }
-
-    return result;
+    return menuSnapshot.docs
+        .map((m) => Menu.fromMap(m.data(), id:m.id))
+        .toList();
   }
 
   @override

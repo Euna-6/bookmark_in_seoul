@@ -33,6 +33,9 @@ class Restaurant{
   final List<Menu>? menuList;
   // 마지막 수정일
   final DateTime? updatedAt;
+  // 지도에 필요한 위도와 경도
+  final double? latitude;
+  final double? longitude;
 
   // 생성자
   Restaurant({
@@ -49,6 +52,8 @@ class Restaurant{
     this.myMemo,
     this.menuList,
     this.updatedAt,
+    this.latitude,
+    this.longitude,
   });
 
   // 불변성 유지를 위해 객체 내부 멤버 값을 직접 변경시키지 않고 copyWith을 통해 새 객체가 생성되도록 함
@@ -66,6 +71,8 @@ class Restaurant{
     String? myMemo,
     List<Menu>? menuList,
     DateTime? updatedAt,
+    double? latitude,
+    double? longitude,
 }) {
     return Restaurant(
         id: id ?? this.id,
@@ -81,6 +88,8 @@ class Restaurant{
         myMemo: myMemo ?? this.myMemo,
         menuList: menuList ?? this.menuList,
         updatedAt: updatedAt ?? this.updatedAt,
+        latitude: latitude ?? this.latitude,
+        longitude: longitude ?? this.longitude,
     );
   }
 
@@ -98,6 +107,8 @@ class Restaurant{
       'bookmark' : bookmark,
       'myMemo' : myMemo,
       'updatedAt' : updatedAt?.toIso8601String(),
+      'latitude' : latitude,
+      'longitude' : longitude,
     };
   }
 
@@ -118,6 +129,8 @@ class Restaurant{
       updatedAt: map['updatedAt'] != null
         ? DateTime.parse(map['updatedAt'])
       : null,
+      latitude: map['latitude'],
+      longitude: map['longitude'],
       menuList: menuList,
     );
   }

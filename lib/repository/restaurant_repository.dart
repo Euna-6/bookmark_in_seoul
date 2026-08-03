@@ -1,9 +1,11 @@
+import '../model/menu.dart';
 import '../model/restaurant.dart';
 
 abstract class RestaurantRepository{
   Future<List<Restaurant>> fetchRestaurants();
   Future<void> addRestaurant(Restaurant restaurant);
   Future<void> removeRestaurant(String id);
+  Future<List<Menu>> fetchMenu(String restaurantId);
 }
 
 /*

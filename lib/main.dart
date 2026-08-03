@@ -2,12 +2,16 @@ import 'package:bookmark_in_seoul/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bookmark_in_seoul/screen/home_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
 
   // flutter 프레임워크가 준비될 때까지 기다림
   WidgetsFlutterBinding.ensureInitialized();
+
+  // .env 파일을 사용하기 위해 가져오는 작업
+  await dotenv.load(fileName: "assets/.env");
 
   // firebase 초기화
   await Firebase.initializeApp(

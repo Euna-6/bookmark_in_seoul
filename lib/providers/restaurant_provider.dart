@@ -1,7 +1,10 @@
+import 'package:bookmark_in_seoul/data/district_data.dart';
 import 'package:bookmark_in_seoul/model/restaurant.dart';
 import 'package:bookmark_in_seoul/repository/restaurant_repository.dart';
 import 'package:bookmark_in_seoul/repository/restaurant_repository_impl.dart';
+import 'package:bookmark_in_seoul/service/kakao_api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'loading_provider.dart';
 
 final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref){
   return RestaurantRepositoryImpl();
@@ -20,7 +23,46 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
 
   Future<void> _loadInitialData() async {
     final repo = ref.read(restaurantRepositoryProvider);
-    state = await repo.fetchRestaurants();
+
+    // Firestore에 데이터가 있는지 확인
+    final existing = await repo.fetchRestaurants();
+
+    if(existing.isEmpty){
+      print('Firestore 데이터 X. 카카오 API 호출 시작');
+      // 로딩 시작
+      ref.read(isLoadingProvider.notifier).start();
+
+      final kakaoService = KakaoApiService();
+
+      // 로딩 시간을 줄이기 위해 첫 지역 먼저 검색 후 화면 출력
+      final firstDistrict = '영등포구'; // 이후에 수정
+      final firstRestaurants = await kakaoService.searchRestaurants('$firstDistrict 음식점');
+      print('$firstDistrict 검색 완료: ${firstRestaurants.length}개');
+
+      for (var restaurant in firstRestaurants){
+        await repo.addRestaurant(restaurant);
+      }
+
+      state = await repo.fetchRestaurants();
+      ref.read(isLoadingProvider.notifier).end();
+
+      // 이후 나머지 24개 구를 백그라운드에서 검색 후 저장
+      final remaining = districtNames.where((d)=> d['value'] != firstDistrict).toList();
+
+      for (var district in remaining) {
+        final value = district['value']!;
+        final restaurants = await kakaoService.searchRestaurants('$value 음식점');
+        for (var restaurant in restaurants) {
+          await repo.addRestaurant(restaurant);
+        }
+      }
+
+      state = await repo.fetchRestaurants();
+
+    } else {
+      print('데이터 있음: ${existing.length}개');
+      state = existing;
+    }
 
   }
 
