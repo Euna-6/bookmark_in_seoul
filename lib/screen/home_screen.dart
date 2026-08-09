@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:bookmark_in_seoul/component/restaurant_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../component/isbookmark_dialog.dart';
+import '../model/restaurant.dart';
+import '../providers/loading_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key});
@@ -29,6 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final restaurantList = ref.watch(sortedBookmarkProvider);
+
     return Scaffold(
       body: SafeArea(
           child: Column(
@@ -53,35 +56,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.only(
                       left: 16.0, right:16.0, top:16.0,
                   ),
-                  child: Container(
-                    color: const Color(0xFFFDEFD9),
-                    child: restaurantList.isEmpty
-                    ? Center(child: Text("등록된 식당이 없어요!"))
-                    : ListView.builder(
-                      itemCount: restaurantList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final item = restaurantList[index];
-                        return RestaurantItem(
-                          index: index,
-                          iconType: (item.isBookmarked) ? item.bookmark : null,
-                          restaurant: item,
-                          onTap: (iconType) {
-                            IsbookmarkDialog.show(
-                                context: context,
-                                selectedIcon : item.bookmark,
-                                tappedIcon: iconType,
-                                onConfirm: () {
-                                  ref.read(restaurantProvider.notifier).toggleBookmark(
-                                      item.id,
-                                      iconType
-                                  );
-                                }
-                            );
-                          }
-                        );
-                      },
-                    ),
-                  ),
+                  child: RestaurantListView(restaurantList : restaurantList),
                 ),
               ),
               Container(
@@ -122,6 +97,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
+}
 
+class RestaurantListView extends ConsumerWidget {
+  final List<Restaurant> restaurantList;
 
+  const RestaurantListView({
+    super.key,
+    required this.restaurantList,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(isLoadingProvider);
+
+    if (isLoading) {
+      print("[homeScreen] isLoading...");
+      return Container(
+        color: const Color(0xFFFDEFD9),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('식당 불러오는 중'),
+            ],
+          ),
+        ),
+      );
+    }
+    return Container(
+      color: const Color(0xFFFDEFD9),
+      child: restaurantList.isEmpty
+          ? Center(child: Text("등록된 식당이 없어요!"))
+          : ListView.builder(
+        itemCount: restaurantList.length,
+        itemBuilder: (BuildContext context, int index) {
+          final item = restaurantList[index];
+          return RestaurantItem(
+              index: index,
+              iconType: (item.isBookmarked) ? item.bookmark : null,
+              restaurant: item,
+              onTap: (iconType) {
+                IsbookmarkDialog.show(
+                    context: context,
+                    selectedIcon : item.bookmark,
+                    tappedIcon: iconType,
+                    onConfirm: () {
+                      ref.read(restaurantProvider.notifier).toggleBookmark(
+                          item.id,
+                          iconType
+                      );
+                    }
+                );
+              }
+          );
+        },
+      ),
+    );
+  }
 }
