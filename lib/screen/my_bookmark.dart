@@ -69,12 +69,14 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                                   context: context,
                                   selectedIcon : item.bookmark,
                                   tappedIcon: item.bookmark,
-                                  onConfirm: () {
+                                  onConfirm: (memo) {
                                     ref.read(restaurantProvider.notifier).toggleBookmark(
                                         item.id,
-                                        item.bookmark
+                                        item.bookmark,
+                                        memo,
                                     );
-                                  }
+                                  },
+                                  myMemo : item.myMemo,
                                 );
                               },
                             );

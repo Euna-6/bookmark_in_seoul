@@ -144,12 +144,14 @@ class RestaurantListView extends ConsumerWidget {
                     context: context,
                     selectedIcon : item.bookmark,
                     tappedIcon: iconType,
-                    onConfirm: () {
+                    onConfirm: (memo) {
                       ref.read(restaurantProvider.notifier).toggleBookmark(
                           item.id,
-                          iconType
+                          iconType,
+                          memo,
                       );
-                    }
+                    },
+                    myMemo : item.myMemo,
                 );
               }
           );

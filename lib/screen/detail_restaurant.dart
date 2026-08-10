@@ -62,10 +62,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                     ),
             ),
           ),
-          // 식당 이름, 북마크 아이콘, 북마크 갯수, 지도 UI
+          // 식당 이름, 북마크 아이콘, 북마크 갯수, 사용자 메모, 지도 UI
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -80,7 +80,7 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                       left: 20.0,
                       right: 20.0,
                       top: 8,
-                      bottom: 24,
+                      bottom: 8,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,12 +93,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                                 context: context,
                                 selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
                                 tappedIcon: 1,
-                                onConfirm: () {
+                                onConfirm: (memo) {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                       restaurant.id,
                                       1,
+                                      memo,
                                   );
-                                }
+                                },
+                                myMemo : restaurant.myMemo,
                             );
                           },
                         ),
@@ -110,12 +112,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                                 context: context,
                                 selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
                                 tappedIcon: 2,
-                                onConfirm: () {
+                                onConfirm: (memo) {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                     restaurant.id,
                                     2,
+                                    memo,
                                   );
-                                }
+                                },
+                                myMemo : restaurant.myMemo,
                             );
                           },
                         ),
@@ -127,12 +131,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                                 context: context,
                                 selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
                                 tappedIcon: 3,
-                                onConfirm: () {
+                                onConfirm: (memo) {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                     restaurant.id,
                                     3,
+                                    memo
                                   );
-                                }
+                                },
+                                myMemo : restaurant.myMemo,
                             );
                           },
                         ),
@@ -144,19 +150,44 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                                 context: context,
                                 selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
                                 tappedIcon: 4,
-                                onConfirm: () {
+                                onConfirm: (memo) {
                                   ref.read(restaurantProvider.notifier).toggleBookmark(
                                     restaurant.id,
                                     4,
+                                    memo,
                                   );
-                                }
+                                },
+                                myMemo : restaurant.myMemo,
                             );
                           },
                         ),
                       ],
                     ),
                   ),
+                  // 사용자 메모
+                  if(restaurant.myMemo != null)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left:20,
+                        right:20,
+                      ),
+                      child: Column(
+                        children: [
+                          Text("나의 메모",
+                            style: TextStyle(
+                              fontSize:11,
+                              fontWeight: FontWeight.w500,
+                            ),),
+                          Text(
+                            restaurant.myMemo!,
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),),
+                        ],
+                      ),
+                    ),
                   // 지도
+                  SizedBox(height:24,),
                   Container(height: 200, color: Colors.grey),
                   const Divider(height: 50, thickness: 1, color: Colors.grey),
                 ],
@@ -234,6 +265,7 @@ class cntBookmark extends StatelessWidget {
                 onTap();
               },
             ),
+            SizedBox(width:3),
             SizedBox(width: 54, child: Text(restaurant.formatCntStar)),
           ],
         );
@@ -247,6 +279,7 @@ class cntBookmark extends StatelessWidget {
                 onTap();
               },
             ),
+            SizedBox(width:3),
             SizedBox(width: 54, child: Text(restaurant.formatCntHeart)),
           ],
         );
@@ -260,6 +293,7 @@ class cntBookmark extends StatelessWidget {
                 onTap();
               },
             ),
+            SizedBox(width:3),
             SizedBox(width: 54, child: Text(restaurant.formatCntCheck)),
           ],
         );
@@ -273,6 +307,7 @@ class cntBookmark extends StatelessWidget {
                 onTap();
               },
             ),
+            SizedBox(width:3),
             SizedBox(width: 54, child: Text(restaurant.formatCntX)),
           ],
         );

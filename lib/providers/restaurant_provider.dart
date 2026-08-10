@@ -37,7 +37,7 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
       // 로딩 시간을 줄이기 위해 첫 지역 먼저 검색 후 화면 출력
       final firstDistrict = '영등포구'; // 이후에 수정
       final firstRestaurants = await kakaoService.searchRestaurants('$firstDistrict 음식점');
-      print('$firstDistrict 검색 완료: ${firstRestaurants.length}개');
+      print('[restaurant_provider] $firstDistrict 검색 완료: ${firstRestaurants.length}개');
 
       for (var restaurant in firstRestaurants){
         await repo.addRestaurant(restaurant);
@@ -60,38 +60,35 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
       state = await repo.fetchRestaurants();
 
     } else {
-      print('데이터 있음: ${existing.length}개');
       state = existing;
     }
 
   }
 
   // 북마크 상태 반전 기능
-  Future<void> toggleBookmark(String id, int iconType) async {
+  Future<void> toggleBookmark(String id, int iconType, String? memo) async {
     final repo = ref.read(restaurantRepositoryProvider);
 
     // 화면 업데이트
     state = [
       for (final res in state)
-        if (res.id==id) _handleToggle(res, iconType) else res,
+        if (res.id==id) _handleToggle(res, iconType, memo) else res,
     ];
 
     // DB 업데이트
     final updatedRes = state.firstWhere((res)=> res.id==id);
     await repo.addRestaurant(updatedRes);
 
-    // TEST
-
   }
 
   // 북마크 상태 변경 관련 로직
-  Restaurant _handleToggle(Restaurant res, int iconType){
+  Restaurant _handleToggle(Restaurant res, int iconType, String? memo){
     if(res.bookmark == iconType){
       // 같은 아이콘 눌렀을 때는 해제한다
       return _applyCountChange(res, iconType, -1).copyWith(
         isBookmarked : false,
         bookmark : 0,
-        myMemo: null,
+        clearMemo: true,
         updatedAt: DateTime.now(),
       );
     } else {
@@ -104,6 +101,7 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
       return _applyCountChange(temp, iconType, 1).copyWith(
         isBookmarked : true,
         bookmark : iconType,
+        myMemo: memo,
         updatedAt : DateTime.now(),
       );
     }
