@@ -62,7 +62,24 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
     } else {
       state = existing;
     }
+  }
 
+  // 메모 변경 기능 : DetailRestaurant에서 사용
+  Future<void> updateMemo(String id, String? memo) async {
+    final repo = ref.read(restaurantRepositoryProvider);
+
+    state = [
+      for (final res in state)
+        if (res.id == id)
+          res.copyWith(
+            myMemo: memo,
+            clearMemo: memo == null,
+          )
+        else res,
+    ];
+
+    final updatedRes = state.firstWhere((res) => res.id == id);
+    await repo.addRestaurant(updatedRes);
   }
 
   // 북마크 상태 반전 기능
@@ -78,7 +95,6 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
     // DB 업데이트
     final updatedRes = state.firstWhere((res)=> res.id==id);
     await repo.addRestaurant(updatedRes);
-
   }
 
   // 북마크 상태 변경 관련 로직

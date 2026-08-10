@@ -59,6 +59,7 @@ class _IsbookmarkDialogState extends State<IsbookmarkDialog> {
 
   Widget build(BuildContext context){
     return AlertDialog(
+      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 8.0),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(

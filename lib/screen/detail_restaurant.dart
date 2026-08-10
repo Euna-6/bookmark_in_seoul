@@ -183,6 +183,27 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                             style: TextStyle(
                               fontSize: 12,
                             ),),
+                          SizedBox(height:4),
+                          GestureDetector(
+                            onTap: () {
+                              MemoDialog.show(
+                                context: context,
+                                myMemo: restaurant.myMemo!,
+                                onConfirm: (memo){
+                                  ref.read(restaurantProvider.notifier).updateMemo(
+                                      restaurant.id,
+                                      memo
+                                  );
+                                }
+                              );
+                              print("[DetailRestaurant] 메모편집버튼 눌림");
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              size: 12,
+                              color: Colors.grey,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -321,3 +342,90 @@ class cntBookmark extends StatelessWidget {
     }
   }
 }
+
+// 메모 편집 버튼
+class MemoDialog extends StatefulWidget {
+  final String myMemo;
+  final Function(String? memo) onConfirm;
+
+  const MemoDialog({
+    super.key,
+    required this.myMemo,
+    required this.onConfirm,
+  });
+
+  @override
+  State<MemoDialog> createState() => _MemoDialogState();
+
+  static Future<void> show({
+    required BuildContext context,
+    required String myMemo,
+    required Function(String? memo) onConfirm,
+  }) {
+    return showDialog<void>(
+        context : context,
+        builder : (context) => MemoDialog(
+          onConfirm: onConfirm,
+          myMemo: myMemo,
+        )
+    );
+  }
+}
+
+class _MemoDialogState extends State<MemoDialog> {
+  late TextEditingController _memoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _memoController = TextEditingController(text:widget.myMemo);
+  }
+  @override
+  void dispose() {
+    _memoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 8.0),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _memoController,
+              decoration: InputDecoration(
+                    hintText: '메모를 입력하세요',
+                    border: OutlineInputBorder(),
+                  ),
+                  style: TextStyle(fontSize: 12),
+                  maxLines: 3,
+                  maxLength: 66,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: ()=>Navigator.pop(context),
+          child: const Text("취소"),
+        ),
+        TextButton(
+          onPressed: () {
+            // 빈 문자열이면 null 처리
+            final memo = _memoController.text.isEmpty
+                ? null
+                : _memoController.text;
+            widget.onConfirm(memo);
+            Navigator.pop(context);
+          },
+          child: const Text("변경"),
+        ),
+      ],
+    );
+  }
+}
+

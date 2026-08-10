@@ -1,5 +1,4 @@
 import 'package:bookmark_in_seoul/component/filter_box.dart';
-import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/bookmark_sort_provider.dart';
 import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
