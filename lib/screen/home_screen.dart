@@ -1,4 +1,5 @@
 import 'package:bookmark_in_seoul/component/filter_box.dart';
+import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/bookmark_sort_provider.dart';
 import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -28,9 +30,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final restaurantList = ref.watch(sortedBookmarkProvider);
+
+    // 지역 필터가 변경되면 스크롤을 맨 위로
+    ref.listen(districtFilterProvider, (pre, next) {
+      if(pre!=next) {
+        scrollController.animateTo(
+            0,
+            duration: Duration(microseconds: 300),
+            curve: Curves.easeOut
+        );
+      }
+    });
+
+    // 북마크 필터가 변경되면 스크롤을 맨 위로
+    ref.listen(bookmarkSortProvider, (pre, next) {
+      if(pre!=next) {
+        scrollController.animateTo(
+            0,
+            duration: Duration(microseconds: 300),
+            curve: Curves.easeOut
+        );
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -56,7 +87,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.only(
                       left: 16.0, right:16.0, top:16.0,
                   ),
-                  child: RestaurantListView(restaurantList : restaurantList),
+                  child: RestaurantListView(
+                    restaurantList : restaurantList,
+                    scrollController : scrollController,
+                  ),
                 ),
               ),
               Container(
@@ -101,10 +135,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 class RestaurantListView extends ConsumerWidget {
   final List<Restaurant> restaurantList;
+  final ScrollController scrollController;
 
   const RestaurantListView({
     super.key,
     required this.restaurantList,
+    required this.scrollController,
   });
 
   @override
@@ -132,29 +168,30 @@ class RestaurantListView extends ConsumerWidget {
       child: restaurantList.isEmpty
           ? Center(child: Text("등록된 식당이 없어요!"))
           : ListView.builder(
-        itemCount: restaurantList.length,
-        itemBuilder: (BuildContext context, int index) {
-          final item = restaurantList[index];
-          return RestaurantItem(
-              index: index,
-              iconType: (item.isBookmarked) ? item.bookmark : null,
-              restaurant: item,
-              onTap: (iconType) {
-                IsbookmarkDialog.show(
-                    context: context,
-                    selectedIcon : item.bookmark,
-                    tappedIcon: iconType,
-                    onConfirm: (memo) {
-                      ref.read(restaurantProvider.notifier).toggleBookmark(
-                          item.id,
-                          iconType,
-                          memo,
+              controller: scrollController,
+              itemCount: restaurantList.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = restaurantList[index];
+                return RestaurantItem(
+                    index: index,
+                    iconType: (item.isBookmarked) ? item.bookmark : null,
+                    restaurant: item,
+                    onTap: (iconType) {
+                      IsbookmarkDialog.show(
+                          context: context,
+                          selectedIcon : item.bookmark,
+                          tappedIcon: iconType,
+                          onConfirm: (memo) {
+                            ref.read(restaurantProvider.notifier).toggleBookmark(
+                                item.id,
+                                iconType,
+                                memo,
+                            );
+                          },
+                          myMemo : item.myMemo,
                       );
-                    },
-                    myMemo : item.myMemo,
+                    }
                 );
-              }
-          );
         },
       ),
     );
