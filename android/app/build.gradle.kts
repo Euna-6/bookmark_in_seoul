@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -8,9 +10,19 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// local.properties 파일 읽어오기 위한 설정
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { stream ->
+        localProperties.load(stream)
+    }
+}
+val myNativeAppKey = localProperties.getProperty("MY_NATIVE_APP_KEY") ?: ""
+
 android {
     namespace = "com.example.bookmark_in_seoul"
-    compileSdk = 34
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -31,6 +43,8 @@ android {
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        manifestPlaceholders["MY_NATIVE_APP_KEY"] = myNativeAppKey
     }
 
     buildTypes {
@@ -40,8 +54,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+
 }
 
 flutter {
     source = "../.."
 }
+

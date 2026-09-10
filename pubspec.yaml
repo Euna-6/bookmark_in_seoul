@@ -41,6 +41,7 @@ dependencies:
   firebase_auth: ^6.5.4
   http: ^1.6.0
   flutter_dotenv: ^5.2.1
+  kakao_flutter_sdk_user: ^1.10.0
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +62,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/icon/icon.png
+    - assets/icon/
     - assets/.env
 
   # The following line ensures that the Material Icons font is
