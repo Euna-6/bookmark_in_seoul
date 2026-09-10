@@ -182,6 +182,7 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                             restaurant.myMemo!,
                             style: TextStyle(
                               fontSize: 12,
+                              color: Color(0xFF505050),
                             ),),
                           SizedBox(height:4),
                           GestureDetector(
