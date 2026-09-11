@@ -1,3 +1,4 @@
+import 'package:bookmark_in_seoul/model/user_bookmark.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/menu.dart';
 import 'restaurant_repository.dart';
@@ -52,6 +53,42 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
   @override
   Future<void> removeRestaurant(String id) async {
     await _db.collection('restaurants').doc(id).delete();
+  }
+
+  // 유저 북마크 목록 가져오기
+  @override
+  Future<List<UserBookmark>> fetchUserBookmark(String userId) async {
+    final snapshot = await _db
+        .collection('users')
+        .doc(userId)
+        .collection('bookmarks')
+        .get();
+
+    return snapshot.docs.map((doc) =>
+        UserBookmark.fromMap(doc.data())
+    ).toList();
+  }
+
+  // 북마크 저장 및 수정
+  @override
+  Future<void> setUserBookmark(String userId, UserBookmark bookmark) async {
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('bookmarks')
+        .doc(bookmark.restaurantId) // 식당 ID를 문서 ID로 사용
+        .set(bookmark.toMap());
+  }
+
+  // 북마크 삭제
+  @override
+  Future<void> removeUserBookmark(String userId, String restaurantId) async {
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('bookmarks')
+        .doc(restaurantId)
+        .delete();
   }
 
 }

@@ -1,10 +1,12 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
+import 'package:bookmark_in_seoul/model/user_bookmark.dart';
 import 'package:bookmark_in_seoul/screen/detail_restaurant.dart';
 import 'package:flutter/material.dart';
 import '../model/restaurant.dart';
 
 class RestaurantItem extends StatelessWidget {
   final Restaurant restaurant;
+  final UserBookmark? userBookmark;
   final int index;
   final int? iconType;
   final Function(int) onTap;
@@ -12,6 +14,7 @@ class RestaurantItem extends StatelessWidget {
   const RestaurantItem({
     super.key,
     required this.restaurant,
+    this.userBookmark,
     required this.index,
     required this.iconType,
     required this.onTap,
@@ -24,7 +27,10 @@ class RestaurantItem extends StatelessWidget {
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailRestaurant(restaurant: restaurant, ),
+            builder: (context) => DetailRestaurant(
+              restaurant: restaurant,
+              userBookmark: userBookmark,
+            ),
           ),
         );
         //onTap(-1);
@@ -58,6 +64,7 @@ class RestaurantItem extends StatelessWidget {
                       // 북마크 갯수 확인 UI
                       cntBookmark(
                         restaurant: restaurant,
+                        userBookmark: userBookmark,
                         iconType: iconType,
                         onTap: onTap,
                       ),
@@ -77,11 +84,13 @@ class RestaurantItem extends StatelessWidget {
 // 식당의 북마크 아이콘, 갯수 정보 UI
 class cntBookmark extends StatelessWidget {
   final Restaurant restaurant;
+  final UserBookmark? userBookmark;
   final int? iconType;
   final Function(int) onTap;
 
   const cntBookmark({
     required this.restaurant,
+    this.userBookmark,
     super.key,
     required this.iconType,
     required this.onTap,
@@ -99,7 +108,7 @@ class cntBookmark extends StatelessWidget {
                 children: [
                   BookmarkIcon(
                     bookmark: 1,
-                    isBookmarked: restaurant.bookmark == 1,
+                    isBookmarked: userBookmark?.bookmark == 1,
                     onTap: () {
                       onTap(1);
                     },
@@ -107,7 +116,7 @@ class cntBookmark extends StatelessWidget {
                   SizedBox(width: 2),
                   SizedBox(width: 65, child: Text(restaurant.formatCntStar)),
                   BookmarkIcon(bookmark: 2,
-                    isBookmarked: restaurant.bookmark == 2,
+                    isBookmarked: userBookmark?.bookmark == 2,
                     onTap: () {
                       onTap(2);
                     },),
@@ -119,7 +128,7 @@ class cntBookmark extends StatelessWidget {
                 children: [
                   BookmarkIcon(
                     bookmark: 3,
-                    isBookmarked: restaurant.bookmark == 3,
+                    isBookmarked: userBookmark?.bookmark == 3,
                     onTap: () {
                       onTap(3);
                     },),
@@ -127,7 +136,7 @@ class cntBookmark extends StatelessWidget {
                   SizedBox(width: 65, child: Text(restaurant.formatCntCheck)),
                   BookmarkIcon(
                     bookmark: 4,
-                    isBookmarked: restaurant.bookmark == 4,
+                    isBookmarked: userBookmark?.bookmark == 4,
                     onTap: () {
                       onTap(4);
                     },),

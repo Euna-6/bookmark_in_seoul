@@ -1,5 +1,6 @@
 import 'package:bookmark_in_seoul/model/restaurant.dart';
 import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
+import 'package:bookmark_in_seoul/providers/user_bookmark_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // 북마크별 필터링 상태 관리
@@ -26,18 +27,22 @@ final bookmarkFilterProvider = NotifierProvider<BookmarkFilterNotifier, int?>(
 final filteredBookmarkProvider = Provider<List<Restaurant>> ((ref) {
   final iconType = ref.watch(bookmarkFilterProvider);  // 선택 북마크. 없으면 null
   final districtFilter = ref.watch(filteredDistrictProvider);  // 지역 필터링 결과 갖고옴
+  final userBookmark = ref.watch(userBookmarkProvider); // 유저 북마크 목록
 
   // 북마크 설정된 아이템 리스트
-  final bookmarkedList = districtFilter
-    .where((item)=> item.isBookmarked)
-    .toList();
+  final bookmarkedList = districtFilter.where((restaurant) {
+    final bookmark = userBookmark.where((b)=>b.restaurantId == restaurant.id).firstOrNull;
+    return bookmark?.isBookmarked ?? false;
+  }).toList();
 
   // 지역별 필터링 결과에 북마크 필터를 추가 적용
   return iconType == null
       ? bookmarkedList
-      : bookmarkedList
-        .where((item)=>item.bookmark == iconType)
-        .toList();
+      : bookmarkedList.where((restaurant) {
+        final bookmark = userBookmark
+          .where((b)=> b.restaurantId == restaurant.id).firstOrNull;
+        return bookmark?.bookmark == iconType;
+      }).toList();
 
 });
 

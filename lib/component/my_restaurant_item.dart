@@ -1,15 +1,18 @@
 import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
+import 'package:bookmark_in_seoul/model/user_bookmark.dart';
 import 'package:flutter/material.dart';
 import '../model/restaurant.dart';
 import '../screen/detail_restaurant.dart';
 
 class MyRestaurantItem extends StatelessWidget {
   final Restaurant restaurant;
+  final UserBookmark? userBookmark;
   final VoidCallback onTap;
 
   const MyRestaurantItem({
     super.key,
     required this.restaurant,
+    this.userBookmark,
     required this.onTap
   });
 
@@ -20,7 +23,10 @@ class MyRestaurantItem extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(builder: (context) =>
-                DetailRestaurant(restaurant: restaurant),
+                DetailRestaurant(
+                    restaurant: restaurant,
+                    userBookmark: userBookmark,
+                ),
             )
         );
       },
@@ -55,16 +61,17 @@ class MyRestaurantItem extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                            ),// 내가 설정한 북마크
+                            ),
+                            // 내가 설정한 북마크
                             BookmarkIcon(
-                              bookmark: restaurant.bookmark,
-                              isBookmarked: restaurant.isBookmarked,
+                              bookmark: userBookmark?.bookmark ?? 0,
+                              isBookmarked: userBookmark?.isBookmarked ?? false,
                               size: 21,
                               onTap: onTap,
                             ),
                           ],
                         ),
-                        Text(restaurant.myMemo??"",
+                        Text(userBookmark?.myMemo??"",
                           style: TextStyle(
                             fontSize: 12,
                           ),

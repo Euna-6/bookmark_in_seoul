@@ -18,21 +18,8 @@ class Restaurant{
   final int cntCheck;
   // 북마크 'X' 갯수
   final int cntX;
-  // 개인의 북마크 설정 유무 확인
-  final bool isBookmarked;
-  // 본인이 설정한 북마크
-  // 0 : non
-  // 1 : star
-  // 2 : heart
-  // 3 : check
-  // 4 : X
-  final int bookmark;
-  // 식당에 대한 개인 메모
-  final String? myMemo;
   // 메뉴 정보
   final List<Menu>? menuList;
-  // 마지막 수정일
-  final DateTime? updatedAt;
   // 지도에 필요한 위도와 경도
   final double? latitude;
   final double? longitude;
@@ -47,11 +34,7 @@ class Restaurant{
     this.cntHeart=0,
     this.cntCheck=0,
     this.cntX=0,
-    this.isBookmarked=false,
-    this.bookmark=0,
-    this.myMemo,
     this.menuList,
-    this.updatedAt,
     this.latitude,
     this.longitude,
   });
@@ -66,12 +49,7 @@ class Restaurant{
     int? cntHeart,
     int? cntCheck,
     int? cntX,
-    bool? isBookmarked,
-    int? bookmark,
-    String? myMemo,
-    bool clearMemo = false,
     List<Menu>? menuList,
-    DateTime? updatedAt,
     double? latitude,
     double? longitude,
 }) {
@@ -84,11 +62,7 @@ class Restaurant{
         cntHeart: cntHeart ?? this.cntHeart,
         cntCheck: cntCheck ?? this.cntCheck,
         cntX: cntX ?? this.cntX,
-        isBookmarked: isBookmarked ?? this.isBookmarked,
-        bookmark: bookmark ?? this.bookmark,
-        myMemo: clearMemo ? null : (myMemo ?? this.myMemo),
         menuList: menuList ?? this.menuList,
-        updatedAt: updatedAt ?? this.updatedAt,
         latitude: latitude ?? this.latitude,
         longitude: longitude ?? this.longitude,
     );
@@ -104,10 +78,6 @@ class Restaurant{
       'cntHeart' : cntHeart,
       'cntCheck' : cntCheck,
       'cntX' : cntX,
-      'isBookmarked' : isBookmarked,
-      'bookmark' : bookmark,
-      'myMemo' : myMemo,
-      'updatedAt' : updatedAt?.toIso8601String(),
       'latitude' : latitude,
       'longitude' : longitude,
     };
@@ -124,12 +94,6 @@ class Restaurant{
       cntHeart: map['cntHeart'] ?? 0,
       cntCheck: map['cntCheck'] ?? 0,
       cntX: map['cntX'] ?? 0,
-      isBookmarked: map['isBookmarked'] ?? false,
-      bookmark: map['bookmark'] ?? 0,
-      myMemo: map['myMemo'] ,
-      updatedAt: map['updatedAt'] != null
-        ? DateTime.parse(map['updatedAt'])
-      : null,
       latitude: map['latitude'],
       longitude: map['longitude'],
       menuList: menuList,

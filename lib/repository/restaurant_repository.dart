@@ -1,3 +1,5 @@
+import 'package:bookmark_in_seoul/model/user_bookmark.dart';
+
 import '../model/menu.dart';
 import '../model/restaurant.dart';
 
@@ -6,6 +8,10 @@ abstract class RestaurantRepository{
   Future<void> addRestaurant(Restaurant restaurant);
   Future<void> removeRestaurant(String id);
   Future<List<Menu>> fetchMenu(String restaurantId);
+
+  Future<List<UserBookmark>> fetchUserBookmark(String userId);
+  Future<void> setUserBookmark(String userId, UserBookmark bookmark);
+  Future<void> removeUserBookmark(String userId, String restaurantId);
 }
 
 /*

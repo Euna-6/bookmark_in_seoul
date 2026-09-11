@@ -3,6 +3,7 @@ import 'package:bookmark_in_seoul/component/filter_box.dart';
 import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
+import 'package:bookmark_in_seoul/providers/user_bookmark_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../component/my_restaurant_item.dart';
@@ -29,6 +30,7 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
   Widget build(BuildContext context) {
     // 필터링된 리스트를 실시간으로 가져온다
     final filterList = ref.watch(filteredBookmarkProvider);
+    final userBookmarks = ref.watch(userBookmarkProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -62,21 +64,24 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                           itemCount: filterList.length,
                           itemBuilder: (BuildContext context, int index) {
                             final item = filterList[index];
+                            final userBookmark = userBookmarks
+                                .where((b) => b.restaurantId == item.id).firstOrNull;
                             return MyRestaurantItem(
                               restaurant: item,
+                              userBookmark: userBookmark,
                               onTap: () {
                                 IsbookmarkDialog.show(
                                   context: context,
-                                  selectedIcon : item.bookmark,
-                                  tappedIcon: item.bookmark,
+                                  selectedIcon : userBookmark?.bookmark,
+                                  tappedIcon: userBookmark?.bookmark,
+                                  myMemo : userBookmark?.myMemo,
                                   onConfirm: (memo) {
-                                    ref.read(restaurantProvider.notifier).toggleBookmark(
+                                    ref.read(userBookmarkProvider.notifier).toggleBookmark(
                                         item.id,
-                                        item.bookmark,
+                                        userBookmark?.bookmark ?? 0,
                                         memo,
                                     );
                                   },
-                                  myMemo : item.myMemo,
                                 );
                               },
                             );

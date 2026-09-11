@@ -2,15 +2,22 @@ import 'package:bookmark_in_seoul/component/bookmark_icon.dart';
 import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/menu_item.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
+import 'package:bookmark_in_seoul/providers/user_bookmark_provider.dart';
 import 'package:flutter/material.dart';
 import '../model/menu.dart';
 import '../model/restaurant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../model/user_bookmark.dart';
 
 class DetailRestaurant extends ConsumerStatefulWidget {
   final Restaurant restaurant;
+  final UserBookmark? userBookmark;
 
-  const DetailRestaurant({super.key, required this.restaurant});
+  const DetailRestaurant({
+    super.key,
+    required this.restaurant,
+    this.userBookmark,
+  });
 
   @override
   ConsumerState<DetailRestaurant> createState() => _DetailRestaurantState();
@@ -39,6 +46,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
   Widget build(BuildContext context) {
     // 현재 보고 있는 식당에 해당하는 id를 찾아서 저장.
     final restaurant = ref.watch(restaurantProvider).firstWhere((e)=>e.id == widget.restaurant.id);
+
+    final userBookmark = ref.watch(userBookmarkProvider)
+        .where((b) => b.restaurantId == restaurant.id).firstOrNull;
+
 
     return Scaffold(
       // 아래로 스크롤 시에 상단 이미지를 사라지게 하기 위한 스크롤뷰
@@ -88,76 +99,80 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                         cntBookmark(
                           bookmark: 1,
                           restaurant: restaurant,
+                          userBookmark: userBookmark,
                           onTap: () {
                             IsbookmarkDialog.show(
                                 context: context,
-                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
+                                selectedIcon: userBookmark?.bookmark,
                                 tappedIcon: 1,
+                                myMemo : userBookmark?.myMemo,
                                 onConfirm: (memo) {
-                                  ref.read(restaurantProvider.notifier).toggleBookmark(
+                                  ref.read(userBookmarkProvider.notifier).toggleBookmark(
                                       restaurant.id,
                                       1,
                                       memo,
                                   );
                                 },
-                                myMemo : restaurant.myMemo,
                             );
                           },
                         ),
                         cntBookmark(
                           bookmark: 2,
                           restaurant: restaurant,
+                          userBookmark: userBookmark,
                           onTap: () {
                             IsbookmarkDialog.show(
-                                context: context,
-                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
-                                tappedIcon: 2,
-                                onConfirm: (memo) {
-                                  ref.read(restaurantProvider.notifier).toggleBookmark(
-                                    restaurant.id,
-                                    2,
-                                    memo,
-                                  );
-                                },
-                                myMemo : restaurant.myMemo,
+                              context: context,
+                              selectedIcon: userBookmark?.bookmark,
+                              tappedIcon: 2,
+                              myMemo : userBookmark?.myMemo,
+                              onConfirm: (memo) {
+                                ref.read(userBookmarkProvider.notifier).toggleBookmark(
+                                  restaurant.id,
+                                  2,
+                                  memo,
+                                );
+                              },
                             );
                           },
                         ),
                         cntBookmark(
                           bookmark: 3,
                           restaurant: restaurant,
+                          userBookmark: userBookmark,
                           onTap: () {
                             IsbookmarkDialog.show(
-                                context: context,
-                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
-                                tappedIcon: 3,
-                                onConfirm: (memo) {
-                                  ref.read(restaurantProvider.notifier).toggleBookmark(
-                                    restaurant.id,
-                                    3,
-                                    memo
-                                  );
-                                },
-                                myMemo : restaurant.myMemo,
+                              context: context,
+                              selectedIcon: userBookmark?.bookmark,
+                              tappedIcon: 3,
+                              myMemo : userBookmark?.myMemo,
+                              onConfirm: (memo) {
+                                ref.read(userBookmarkProvider.notifier).toggleBookmark(
+                                  restaurant.id,
+                                  3,
+                                  memo,
+                                );
+                              },
                             );
                           },
                         ),
                         cntBookmark(
                           bookmark: 4,
                           restaurant: restaurant,
+                          userBookmark: userBookmark,
                           onTap: () {
                             IsbookmarkDialog.show(
-                                context: context,
-                                selectedIcon: restaurant.isBookmarked ? restaurant.bookmark : null,
-                                tappedIcon: 4,
-                                onConfirm: (memo) {
-                                  ref.read(restaurantProvider.notifier).toggleBookmark(
-                                    restaurant.id,
-                                    4,
-                                    memo,
-                                  );
-                                },
-                                myMemo : restaurant.myMemo,
+                              context: context,
+                              selectedIcon: userBookmark?.bookmark,
+                              tappedIcon: 4,
+                              myMemo : userBookmark?.myMemo,
+                              onConfirm: (memo) {
+                                ref.read(userBookmarkProvider.notifier).toggleBookmark(
+                                  restaurant.id,
+                                  4,
+                                  memo,
+                                );
+                              },
                             );
                           },
                         ),
@@ -165,7 +180,7 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                     ),
                   ),
                   // 사용자 메모
-                  if(restaurant.myMemo != null)
+                  if(userBookmark?.myMemo != null)
                     Padding(
                       padding: const EdgeInsets.only(
                         left:20,
@@ -179,7 +194,7 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                               fontWeight: FontWeight.w500,
                             ),),
                           Text(
-                            restaurant.myMemo!,
+                            userBookmark!.myMemo!,
                             style: TextStyle(
                               fontSize: 12,
                               color: Color(0xFF505050),
@@ -189,15 +204,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                             onTap: () {
                               MemoDialog.show(
                                 context: context,
-                                myMemo: restaurant.myMemo!,
+                                myMemo: userBookmark.myMemo!,
                                 onConfirm: (memo){
-                                  ref.read(restaurantProvider.notifier).updateMemo(
+                                  ref.read(userBookmarkProvider.notifier).updateMemo(
                                       restaurant.id,
                                       memo
                                   );
                                 }
                               );
-                              print("[DetailRestaurant] 메모편집버튼 눌림");
                             },
                             child: Icon(
                               Icons.edit,
@@ -265,12 +279,14 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
 class cntBookmark extends StatelessWidget {
   final int bookmark;
   final Restaurant restaurant;
+  final UserBookmark? userBookmark;
   final VoidCallback onTap;
 
   const cntBookmark({
     super.key,
     required this.bookmark,
     required this.restaurant,
+    this.userBookmark,
     required this.onTap,
   });
 
@@ -282,7 +298,7 @@ class cntBookmark extends StatelessWidget {
           children: [
             BookmarkIcon(
               bookmark: 1,
-              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==1,
+              isBookmarked: userBookmark?.bookmark == 1,
               onTap: () {
                 onTap();
               },
@@ -296,7 +312,7 @@ class cntBookmark extends StatelessWidget {
           children: [
             BookmarkIcon(
               bookmark: 2,
-              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==2,
+              isBookmarked: userBookmark?.bookmark == 2,
               onTap: () {
                 onTap();
               },
@@ -310,7 +326,7 @@ class cntBookmark extends StatelessWidget {
           children: [
             BookmarkIcon(
               bookmark: 3,
-              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==3,
+              isBookmarked: userBookmark?.bookmark == 3,
               onTap: () {
                 onTap();
               },
@@ -324,7 +340,7 @@ class cntBookmark extends StatelessWidget {
           children: [
             BookmarkIcon(
               bookmark: 4,
-              isBookmarked: restaurant.isBookmarked && restaurant.bookmark==4,
+              isBookmarked: userBookmark?.bookmark == 4,
               onTap: () {
                 onTap();
               },
