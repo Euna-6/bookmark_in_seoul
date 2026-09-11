@@ -100,6 +100,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          // MyBookmark 화면에서 돌아왔을때에 기존에 보던 지역을 그대로 보기 위함
+          final label = ref.read(districtFilterProvider);
+          print('[HomeScreen] label = $label');
+
           await Navigator.push(
             context,
             PageRouteBuilder(
@@ -118,10 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
             ),
           );
-          ref.read(districtFilterProvider.notifier).state = '영등포구';
-          setState(() {
-            // MyBookmark에서 pop 되었을때 build 재실행하여 UI 업데이트
-          });
+          ref.read(districtFilterProvider.notifier).state = label;
           },
         backgroundColor: Colors.white,
         child: const Icon(
