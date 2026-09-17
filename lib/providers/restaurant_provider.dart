@@ -3,6 +3,7 @@ import 'package:bookmark_in_seoul/model/restaurant.dart';
 import 'package:bookmark_in_seoul/repository/restaurant_repository.dart';
 import 'package:bookmark_in_seoul/repository/restaurant_repository_impl.dart';
 import 'package:bookmark_in_seoul/service/kakao_api_service.dart';
+import 'package:bookmark_in_seoul/service/location_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'loading_provider.dart';
 
@@ -31,11 +32,14 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
       print('Firestore 데이터 X. 카카오 API 호출 시작');
       // 로딩 시작
       ref.read(isLoadingProvider.notifier).start();
-
       final kakaoService = KakaoApiService();
 
+      // 첫 화면은 현재 위치 '구' 출력
+      final locationService = LocationService();
+      final currentDistrict = await locationService.getCurrentDistrict();
+
       // 로딩 시간을 줄이기 위해 첫 지역 먼저 검색 후 화면 출력
-      final firstDistrict = '영등포구'; // 이후에 수정
+      final firstDistrict = currentDistrict ?? '영등포구';
       final firstRestaurants = await kakaoService.searchRestaurants('$firstDistrict 음식점');
       print('[restaurant_provider] $firstDistrict 검색 완료: ${firstRestaurants.length}개');
 

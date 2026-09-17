@@ -4,6 +4,7 @@ import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/providers/user_bookmark_provider.dart';
 import 'package:bookmark_in_seoul/screen/my_bookmark.dart';
+import 'package:bookmark_in_seoul/service/location_service.dart';
 import 'package:flutter/material.dart';
 import 'package:bookmark_in_seoul/component/restaurant_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,8 +25,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(districtFilterProvider.notifier).state = '영등포구';
+    Future.microtask(() async {
+      // 현재 위치 '구' 설정
+      final locationService = LocationService();
+      final currentDistrict = await locationService.getCurrentDistrict();
+
+      ref.read(districtFilterProvider.notifier).state = currentDistrict ?? '영등포구';
       ref.read(bookmarkSortProvider.notifier).state = 2;
     });
   }
