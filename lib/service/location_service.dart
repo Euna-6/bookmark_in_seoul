@@ -12,11 +12,15 @@ class LocationService {
     LocationPermission permission = await Geolocator.checkPermission();
 
     if(permission == LocationPermission.denied){
+      print('[LocationService] 권한 거부');
       permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // 팝업에서 사용자가 거부를 누름
+        return null;
+      }
     }
-    if(permission != LocationPermission.always
-        && permission != LocationPermission.whileInUse){
-      throw Exception('위치 권한을 허가 해주세요');
+    if (permission == LocationPermission.deniedForever) {
+      //await Geolocator.openAppSettings();
     }
 
     // 현재 위도, 경도 가져오기
