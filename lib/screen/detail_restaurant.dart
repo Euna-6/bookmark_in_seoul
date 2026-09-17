@@ -3,7 +3,10 @@ import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/menu_item.dart';
 import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/providers/user_bookmark_provider.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../model/menu.dart';
 import '../model/restaurant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +29,7 @@ class DetailRestaurant extends ConsumerStatefulWidget {
 class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
   List<Menu> _menuList = [];  // 메뉴 상태 관리
   bool _isMenuLoading = true; // 메뉴 로딩 상태
+  GoogleMapController? _mapController;
 
   @override
   void initState() {
@@ -40,6 +44,12 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
       _menuList = menus;
       _isMenuLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -224,7 +234,7 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                     ),
                   // 지도
                   SizedBox(height:24,),
-                  Container(height: 200, color: Colors.grey),
+                  _buildMap(),
                   const Divider(height: 50, thickness: 1, color: Colors.grey),
                 ],
               ),
@@ -270,6 +280,59 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
           // 마지막 아이템 하단에 여백
           const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
+      ),
+    );
+  }
+
+  // _mapController 를 이 클래스에 선언해두었기 때문에
+  // class로 분리하지 않고 함수로 작성
+  Widget _buildMap() {
+    // 위도, 경도 정보가 없으면 지도 표시 안 함
+    if (widget.restaurant.latitude == null || widget.restaurant.longitude == null) {
+      return Container(
+        height: 220,
+        color: Colors.grey,
+        child: Center(
+          child: Text(
+            '위치 정보가 없어요!',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 220,
+      child: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+            widget.restaurant.latitude!,
+            widget.restaurant.longitude!,
+          ),
+          zoom: 16,
+        ),
+        markers: {
+          Marker(
+            markerId: MarkerId(widget.restaurant.id),
+            position: LatLng(
+              widget.restaurant.latitude!,
+              widget.restaurant.longitude!,
+            ),
+            infoWindow: InfoWindow(
+              title: widget.restaurant.restaurantName,
+            ),
+          ),
+        },
+        onMapCreated: (controller) {
+          _mapController = controller;
+        },
+        gestureRecognizers: {
+          // 지도 사용 시에 화면이 스크롤되는 경우를 방지
+          Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer(),
+          ),
+        },
+        scrollGesturesEnabled: true,
       ),
     );
   }
