@@ -33,15 +33,10 @@ class FilterBox extends ConsumerWidget {
         SizedBox(width: 16,),
         Expanded(
           child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFFFDEFD9),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            padding: const EdgeInsets.fromLTRB(16, 26, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child:
             Row(
               children: [
-                SizedBox(width:8,),
                 // 지역별 필터링
                 Expanded(
                     child: Column(
@@ -77,7 +72,6 @@ class FilterBox extends ConsumerWidget {
                     ],
                   )
                 ),
-                SizedBox(width:8,),
               ]
             ),
           ),
@@ -90,10 +84,10 @@ class FilterBox extends ConsumerWidget {
 
 Widget _filterButton({required String label, required bool isSelected}) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
     decoration: BoxDecoration(
-      border: Border.all(color: Colors.black45),
-      borderRadius: BorderRadius.circular(8),
+      color: Color(0xFFFDEFD9),
+      borderRadius: BorderRadius.circular(20),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,7 +95,8 @@ Widget _filterButton({required String label, required bool isSelected}) {
         Text(
           label,
           style: TextStyle(
-            color: Colors.black
+            color: Colors.black,
+            fontSize: 17,
           ),
         ),
         const Icon(Icons.arrow_drop_down, color: Colors.black45),
@@ -132,13 +127,6 @@ void _showDistrictBottomSheet(BuildContext context, WidgetRef ref) {
                     const Text(
                       '지역 선택',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref.read(districtFilterProvider.notifier).clear();
-                        Navigator.pop(context);
-                      },
-                      child: const Text('전지역 보기'),
                     ),
                   ],
                 ),
@@ -185,7 +173,7 @@ void _showBookmarkBottomSheet(BuildContext context, WidgetRef ref, FilterMode mo
     ),
     builder: (context) {
       return SizedBox(
-        height: 360,
+        height: 320,
         child: Column(
           children: [
             // 상단 타이틀 + 초기화 버튼

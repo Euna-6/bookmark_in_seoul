@@ -75,20 +75,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               SizedBox(height: 15),
               Image.asset(
                 'assets/icon/icon.png',
-                width: 100,
-                height: 100,
+                width: 65,
+                height: 65,
               ),
-              SizedBox(height: 15),
+              Divider(
+                height:20,
+                color: Color(0xFED6D6D6),
+              ),
               // 지역별, 북마크별 정렬 설정 박스 UI
               SizedBox(
-                  height: 95,
+                  height: 86,
                   child: FilterBox(mode: FilterMode.sort)
               ),
               // 하단 식당 목록
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 16.0, right:16.0, top:16.0,
+                      left: 16.0, right:16.0,
                   ),
                   child: RestaurantListView(
                     restaurantList : restaurantList,
@@ -154,7 +157,6 @@ class RestaurantListView extends ConsumerWidget {
 
     if (isLoading) {
       return Container(
-        color: const Color(0xFFFDEFD9),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +171,6 @@ class RestaurantListView extends ConsumerWidget {
     }
 
     return Container(
-      color: const Color(0xFFFDEFD9),
       child: restaurantList.isEmpty
           ? Center(child: Text("등록된 식당이 없어요!"))
           : ListView.builder(

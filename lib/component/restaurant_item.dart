@@ -37,42 +37,76 @@ class RestaurantItem extends StatelessWidget {
       },
       child: Container(
         child: Padding(
-          padding: const EdgeInsets.only(left: 16, top: 16),
+          padding: const EdgeInsets.only(left: 8, top: 8, right: 8,),
           child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // 식당 사진
-                Container(color: Color(0xFFE57022), height: 85, width: 85),
-                SizedBox(width: 13),
-                // 식당 정보
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 식당 이름
-                      Text(
-                        restaurant.restaurantName,
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                      // 북마크 갯수 확인 UI
-                      cntBookmark(
-                        restaurant: restaurant,
-                        userBookmark: userBookmark,
-                        iconType: iconType,
-                        onTap: onTap,
-                      ),
-                      SizedBox(height:2),
-                    ],
-                  ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: Color(0xFEE4E4E4),
+                  width: 1.0,
                 ),
-              ],
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 3,
+                    offset: Offset(0,2),
+                  )
+                ]
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // 식당 사진
+                    SizedBox(
+                      width: 85,
+                      height: 85,
+                      child: restaurant.imgUrl!= null
+                        ? Image.network(
+                          restaurant.imgUrl!,
+                          fit: BoxFit.cover,
+                        )
+                        : Container(
+                          // 이미지가 없는 경우
+                          color: Color(0xFFE57022),
+                          height: 85,
+                          width: 85
+                        ),
+                      ),
+                    SizedBox(width: 13),
+                    // 식당 정보
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 식당 이름
+                          Text(
+                            restaurant.restaurantName,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          // 북마크 갯수 확인 UI
+                          cntBookmark(
+                            restaurant: restaurant,
+                            userBookmark: userBookmark,
+                            iconType: iconType,
+                            onTap: onTap,
+                          ),
+                          SizedBox(height:2),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

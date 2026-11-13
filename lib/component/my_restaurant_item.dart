@@ -32,57 +32,77 @@ class MyRestaurantItem extends StatelessWidget {
       },
       child: Container(
           child: Padding(
-            padding: const EdgeInsets.only(left:16, top:16),
+            padding: const EdgeInsets.only(left:8, top:8, right: 8,),
             child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // 식당 사진
-                  Container(
-                    color: Color(0xFFE57022),
-                    height: 85,
-                    width: 85,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Color(0xFEE4E4E4),
+                    width: 1.0,
                   ),
-                  SizedBox(width: 13,),
-                  // 식당 정보
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 3,
+                        offset: Offset(0,2),
+                      )
+                    ]
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // 식당 사진
+                      Container(
+                        color: Color(0xFFE57022),
+                        height: 85,
+                        width: 85,
+                      ),
+                      SizedBox(width: 13,),
+                      // 식당 정보
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(restaurant.restaurantName,
-                                style: TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.w600,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(restaurant.restaurantName,
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
+                                // 내가 설정한 북마크
+                                BookmarkIcon(
+                                  bookmark: userBookmark?.bookmark ?? 0,
+                                  isBookmarked: userBookmark?.isBookmarked ?? false,
+                                  size: 21,
+                                  onTap: onTap,
+                                ),
+                              ],
                             ),
-                            // 내가 설정한 북마크
-                            BookmarkIcon(
-                              bookmark: userBookmark?.bookmark ?? 0,
-                              isBookmarked: userBookmark?.isBookmarked ?? false,
-                              size: 21,
-                              onTap: onTap,
+                            Text(userBookmark?.myMemo??"",
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
                             ),
                           ],
                         ),
-                        Text(userBookmark?.myMemo??"",
-                          style: TextStyle(
-                            fontSize: 12,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width:16),
+                    ],
                   ),
-                  SizedBox(width:16),
-                ],
+                )
               ),
             ),
           )

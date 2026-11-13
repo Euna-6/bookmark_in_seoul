@@ -48,6 +48,9 @@ class MyApp extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
 
     return MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
       home: authState.when(
         data: (user) {
           // 로그인 상태면 메인화면, 아니면 로그인 화면

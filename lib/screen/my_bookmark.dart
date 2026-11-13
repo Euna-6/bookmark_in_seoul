@@ -41,23 +41,25 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
             SizedBox(height: 15),
             Image.asset(
               'assets/icon/icon.png',
-              width: 100,
-              height: 100,
+              width: 65,
+              height: 65,
             ),
-            SizedBox(height: 15),
+            Divider(
+              height:20,
+              color: Color(0xFED6D6D6),
+            ),
             // 상단 북마크별 보기 설정
             SizedBox(
-                height: 95,
+                height: 86,
                 child: FilterBox(mode: FilterMode.filter)
             ),
             // 하단 식당 목록
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
-                  left: 16.0, right:16.0, top:16.0,
+                  left: 16.0, right:16.0,
                 ),
                 child: Container(
-                  color: const Color(0xFFFDEFD9),
                   child: filterList.isEmpty
                       ? Center(child: Text("리스트가 비었어요"))
                       : ListView.builder(
