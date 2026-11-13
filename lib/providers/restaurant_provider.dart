@@ -35,7 +35,6 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
     loading.start();
 
     try {
-      await Future.delayed(const Duration(seconds:3));
       // Firestore에 데이터가 있는지 확인
       final existing = await repo.fetchRestaurants();
 
