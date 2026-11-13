@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
@@ -53,6 +54,27 @@ class LoginScreen extends ConsumerWidget {
                 width: 200,
               ),
             ),
+            // 테스트용 익명 로그인
+            // 이후에 삭제할 코드
+            TextButton(
+                onPressed: () async {
+                  final result = await FirebaseAuth.instance.signInAnonymously();
+
+                  if (result != null) {
+                    // 로그인 성공 시, 메인화면으로
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  } else {
+                    // 로그인 실패
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('로그인에 실패했어요. 다시 시도해주세요.')),
+                    );
+                  }
+                },
+                child: Text('테스트용 익명로그인')
+            )
           ],
         ),
       ),
