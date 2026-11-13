@@ -32,7 +32,7 @@ class MyRestaurantItem extends StatelessWidget {
       },
       child: Container(
           child: Padding(
-            padding: const EdgeInsets.only(left:8, top:8, right: 8,),
+            padding: const EdgeInsets.only(left:8,  right: 8, bottom: 8,),
             child: IntrinsicHeight(
               child: Container(
                 decoration: BoxDecoration(
@@ -57,7 +57,10 @@ class MyRestaurantItem extends StatelessWidget {
                     children: [
                       // 식당 사진
                       Container(
-                        color: Color(0xFFE57022),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFF7A00),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         height: 85,
                         width: 85,
                       ),

@@ -2,7 +2,6 @@ import 'package:bookmark_in_seoul/component/isbookmark_dialog.dart';
 import 'package:bookmark_in_seoul/component/filter_box.dart';
 import 'package:bookmark_in_seoul/providers/bookmark_filter_provider.dart';
 import 'package:bookmark_in_seoul/providers/district_filter_provider.dart';
-import 'package:bookmark_in_seoul/providers/restaurant_provider.dart';
 import 'package:bookmark_in_seoul/providers/user_bookmark_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,8 +40,8 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
             SizedBox(height: 15),
             Image.asset(
               'assets/icon/icon.png',
-              width: 65,
-              height: 65,
+              width: 70,
+              height: 70,
             ),
             Divider(
               height:20,
@@ -57,11 +56,24 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
-                  left: 16.0, right:16.0,
+                  left: 16.0, right:16.0, top: 8.0,
                 ),
                 child: Container(
                   child: filterList.isEmpty
-                      ? Center(child: Text("리스트가 비었어요"))
+                      ? Column(
+                        children: [
+                          SizedBox(height:180),
+                          Image.asset(
+                            'assets/icon/bookmark_guide.png',
+                            width: double.infinity,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          SizedBox(height:30),
+                          Text(
+                              '북마크를 눌러 나만의 북마크 리스트를 만들어보세요!'
+                          )
+                        ],
+                      )
                       : ListView.builder(
                           itemCount: filterList.length,
                           itemBuilder: (BuildContext context, int index) {
@@ -93,7 +105,7 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
                     ),
                   ),
             Container(
-              height: 16.0,
+              height: 8.0,
             )
           ],
         ),
@@ -105,7 +117,7 @@ class _MyBookmarkState extends ConsumerState<MyBookmark> {
         backgroundColor: Colors.white,
         child: const Icon(
             Icons.arrow_back,
-            color: const Color(0xFFE57022)
+            color: const Color(0xFFFF7A00)
       ),
       ),
     );

@@ -75,8 +75,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               SizedBox(height: 15),
               Image.asset(
                 'assets/icon/icon.png',
-                width: 65,
-                height: 65,
+                width: 70,
+                height: 70,
               ),
               Divider(
                 height:20,
@@ -91,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 16.0, right:16.0,
+                      left: 16.0, right:16.0, top: 8,
                   ),
                   child: RestaurantListView(
                     restaurantList : restaurantList,
@@ -100,7 +100,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               Container(
-                height: 16.0,
+                height: 8.0,
               )
             ],
           )),
@@ -133,7 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         backgroundColor: Colors.white,
         child: const Icon(
             Icons.bookmarks,
-            color: const Color(0xFFE57022)
+            color: const Color(0xFFFF7A00)
         ),
       ),
     );

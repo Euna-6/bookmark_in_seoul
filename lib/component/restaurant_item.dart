@@ -37,7 +37,7 @@ class RestaurantItem extends StatelessWidget {
       },
       child: Container(
         child: Padding(
-          padding: const EdgeInsets.only(left: 8, top: 8, right: 8,),
+          padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8,),
           child: IntrinsicHeight(
             child: Container(
               decoration: BoxDecoration(
@@ -65,16 +65,24 @@ class RestaurantItem extends StatelessWidget {
                       width: 85,
                       height: 85,
                       child: restaurant.imgUrl!= null
-                        ? Image.network(
-                          restaurant.imgUrl!,
-                          fit: BoxFit.cover,
+                        ? Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                          child: Image.network(
+                            restaurant.imgUrl!,
+                            fit: BoxFit.cover,
+                          ),
                         )
                         : Container(
-                          // 이미지가 없는 경우
-                          color: Color(0xFFE57022),
-                          height: 85,
-                          width: 85
+                        // 이미지가 없는 경우
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFF7A00),
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        height: 85,
+                        width: 85,
+                      ),
                       ),
                     SizedBox(width: 13),
                     // 식당 정보

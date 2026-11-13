@@ -90,9 +90,10 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height:8),
                   Text(
                     widget.restaurant.restaurantName,
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                     maxLines: 2,
                   ),
@@ -100,8 +101,8 @@ class _DetailRestaurantState extends ConsumerState<DetailRestaurant> {
                     padding: const EdgeInsets.only(
                       left: 20.0,
                       right: 20.0,
-                      top: 8,
-                      bottom: 8,
+                      top: 12,
+                      bottom: 6,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
