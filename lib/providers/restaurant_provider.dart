@@ -18,54 +18,72 @@ class RestaurantNofitier extends Notifier<List<Restaurant>> {
   List<Restaurant> build() {
     // 처음엔 빈 리스트로 보여주고 아래 함수에서 데이터를 비동기로 불러옴
     // build 안에서는 await를 쓸 수 없기 때문
-    _loadInitialData();
+    Future.microtask(()=>_loadInitialData());
     return [];
   }
 
   Future<void> _loadInitialData() async {
+    final loading = ref.read(isLoadingProvider.notifier);
     final repo = ref.read(restaurantRepositoryProvider);
 
-    // Firestore에 데이터가 있는지 확인
-    final existing = await repo.fetchRestaurants();
+    // 백그라운드 로드에 필요한 변수
+    KakaoApiService? kakaoService;
+    String? firstDistrict;
+    bool needBackgroundLoad = false;
 
-    if(existing.isEmpty){
-      print('Firestore 데이터 X. 카카오 API 호출 시작');
-      // 로딩 시작
-      ref.read(isLoadingProvider.notifier).start();
-      final kakaoService = KakaoApiService();
+    // 로딩스피너 시작
+    loading.start();
 
-      // 첫 화면은 현재 위치 '구' 출력
-      final locationService = LocationService();
-      final currentDistrict = await locationService.getCurrentDistrict();
+    try {
+      await Future.delayed(const Duration(seconds:3));
+      // Firestore에 데이터가 있는지 확인
+      final existing = await repo.fetchRestaurants();
 
-      // 로딩 시간을 줄이기 위해 첫 지역 먼저 검색 후 화면 출력
-      final firstDistrict = currentDistrict ?? '영등포구';
-      final firstRestaurants = await kakaoService.searchRestaurants('$firstDistrict 음식점');
-      print('[restaurant_provider] $firstDistrict 검색 완료: ${firstRestaurants.length}개');
+      if (existing.isEmpty) {
+        print('[restaurant_provider] Firestore 데이터 X. 카카오 API 호출 시작');
+        kakaoService = KakaoApiService();
 
-      for (var restaurant in firstRestaurants){
-        await repo.addRestaurant(restaurant);
+        // 첫 화면은 현재 위치 '구' 출력
+        final locationService = LocationService();
+        final currentDistrict = await locationService.getCurrentDistrict();
+
+        // 로딩 시간을 줄이기 위해 첫 지역 먼저 검색 후 화면 출력
+        firstDistrict = currentDistrict ?? '영등포구';
+        final firstRestaurants = await kakaoService.searchRestaurants(
+            '$firstDistrict 음식점');
+        print('[restaurant_provider] $firstDistrict 검색 완료: ${firstRestaurants
+            .length}개');
+
+        for (var restaurant in firstRestaurants) {
+          await repo.addRestaurant(restaurant);
+        }
+
+        state = await repo.fetchRestaurants();
+        needBackgroundLoad = true;
+      } else {
+        state = existing;
       }
+    } catch(e) {
+      print('[restaurant_provider] 로드 실패 $e');
+    } finally {
+      // 스피너 무조건 멈춰
+      loading.end();
+    }
 
-      state = await repo.fetchRestaurants();
-      ref.read(isLoadingProvider.notifier).end();
-
+    if(needBackgroundLoad) {
       // 이후 나머지 24개 구를 백그라운드에서 검색 후 저장
       final remaining = districtNames.where((d)=> d['value'] != firstDistrict).toList();
 
       for (var district in remaining) {
         final value = district['value']!;
-        final restaurants = await kakaoService.searchRestaurants('$value 음식점');
+        final restaurants = await kakaoService!.searchRestaurants('$value 음식점');
         for (var restaurant in restaurants) {
           await repo.addRestaurant(restaurant);
         }
       }
-
       state = await repo.fetchRestaurants();
-
-    } else {
-      state = existing;
     }
+
   }
 
   // 북마크 설정or해제 시에 카운트 업데이트

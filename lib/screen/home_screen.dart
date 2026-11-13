@@ -149,11 +149,10 @@ class RestaurantListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(isLoadingProvider);
     final userBookmarks = ref.watch(userBookmarkProvider);
+    final isLoading = ref.watch(isLoadingProvider);
 
     if (isLoading) {
-      print("[homeScreen] isLoading...");
       return Container(
         color: const Color(0xFFFDEFD9),
         child: Center(
@@ -168,6 +167,7 @@ class RestaurantListView extends ConsumerWidget {
         ),
       );
     }
+
     return Container(
       color: const Color(0xFFFDEFD9),
       child: restaurantList.isEmpty
