@@ -11,6 +11,18 @@ class LocationService {
     // 위치 권한 확인
     LocationPermission permission = await Geolocator.checkPermission();
 
+    /*
+    1. while using the app (앱 사용 중에만 허용)
+     :  LocationPermission.whileInUse
+        영구적 허용으로 앱을 껐다 켜도 팝업이 뜨지 않음
+    2. Only this time (이번만 허용)
+     :  앱 종료 후 or 일정 시간 후에 권한이 회수되어 팝업이 다시 뜸
+    3. Don't allow (허용 안 함)
+     :  1번 거절->LocationPermission.denied 되고 다시 팝업 띄울 수 있음
+        2번 거절->LocationPermission.deniedForever 되어 영구 거절
+                 사용자가 수동으로 권한 켜야 함
+     */
+
     if(permission == LocationPermission.denied){
       print('[LocationService] 권한 거부');
       permission = await Geolocator.requestPermission();
